@@ -4,11 +4,11 @@
 	import { aiStore } from '$stores/ai';
 	import { getInitials } from '$lib/utils/helpers';
 
-	export let showAIButton = false;
+	let { showAIButton = false }: { showAIButton?: boolean } = $props();
 
 	let initials = $derived($currentUser ? getInitials($currentUser.firstName, $currentUser.lastName) : '');
 
-	let userMenuOpen = false;
+	let userMenuOpen = $state(false);
 </script>
 
 <header class="sticky top-0 z-40 glass-strong border-b border-white/5">

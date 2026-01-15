@@ -3,9 +3,9 @@
 	import { formatDuration, getDifficultyColor } from '$lib/utils/helpers';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
+	let { data }: { data: PageData } = $props();
 
-	let mounted = false;
+	let mounted = $state(false);
 
 	onMount(() => {
 		mounted = true;
@@ -20,8 +20,8 @@
 		{ id: 'med', name: 'Medical', count: 1, icon: '🩺' }
 	];
 
-	let selectedDiscipline = 'all';
-	let searchQuery = '';
+	let selectedDiscipline = $state('all');
+	let searchQuery = $state('');
 
 	// Lab experiments with proper routing
 	const experiments = [

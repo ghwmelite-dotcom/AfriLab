@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let mounted = false;
-	let searchQuery = '';
-	let filterStatus = 'all';
-	let showCreateModal = false;
+	let mounted = $state(false);
+	let searchQuery = $state('');
+	let filterStatus = $state('all');
+	let showCreateModal = $state(false);
 
 	onMount(() => {
 		mounted = true;
@@ -75,13 +75,13 @@
 	];
 
 	// New assignment form data
-	let newAssignment = {
+	let newAssignment = $state({
 		title: '',
 		lab: '',
 		dueDate: '',
 		instructions: '',
 		maxScore: 100
-	};
+	});
 
 	const labs = [
 		{ id: 'chem-titration', name: 'Acid-Base Titration', discipline: 'Chemistry' },

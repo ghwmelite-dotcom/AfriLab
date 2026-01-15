@@ -3,16 +3,16 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	let loading = false;
-	let error = '';
-	let step = 1;
-	let mounted = false;
+	let loading = $state(false);
+	let error = $state('');
+	let step = $state(1);
+	let mounted = $state(false);
 
 	onMount(() => {
 		mounted = true;
 	});
 
-	let formData = {
+	let formData = $state({
 		firstName: '',
 		lastName: '',
 		email: '',
@@ -20,7 +20,7 @@
 		confirmPassword: '',
 		institutionCode: '',
 		role: 'student'
-	};
+	});
 
 	// Password strength calculation
 	let passwordStrength = $derived(calculatePasswordStrength(formData.password));

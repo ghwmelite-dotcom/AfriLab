@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let mounted = false;
-	let searchQuery = '';
-	let filterStatus = 'all';
+	let mounted = $state(false);
+	let searchQuery = $state('');
+	let filterStatus = $state('all');
 
 	onMount(() => {
 		mounted = true;

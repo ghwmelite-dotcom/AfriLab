@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { formatNumber } from '$lib/utils/helpers';
 
-	export let volume: number; // Current volume in mL
-	export let maxVolume: number = 50; // Max capacity
-	export let isPouring: boolean = false;
-	export let onPour: () => void = () => {};
-	export let onStopPour: () => void = () => {};
+	let { volume, maxVolume = 50, isPouring = false, onPour = () => {}, onStopPour = () => {} }: {
+		volume: number;
+		maxVolume?: number;
+		isPouring?: boolean;
+		onPour?: () => void;
+		onStopPour?: () => void;
+	} = $props();
 
 	let fillPercent = $derived((volume / maxVolume) * 100);
 	let reading = $derived(maxVolume - volume); // Burette readings go from 0 at top

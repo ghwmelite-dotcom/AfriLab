@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { labStore, currentStep, progress, isFirstStep, isLastStep } from '$stores/lab';
 
-	export let onComplete: () => void = () => {};
+	let { onComplete = () => {} }: { onComplete?: () => void } = $props();
 </script>
 
 <div class="card p-4 space-y-4">

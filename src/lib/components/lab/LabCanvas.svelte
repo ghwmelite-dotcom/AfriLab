@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import type { Snippet } from 'svelte';
 
-	export let className = '';
+	let { className = '', children }: { className?: string; children?: Snippet } = $props();
 
 	let canvasContainer: HTMLDivElement;
 </script>
@@ -10,5 +11,7 @@
 	bind:this={canvasContainer}
 	class="lab-container {className}"
 >
-	<slot />
+	{#if children}
+		{@render children()}
+	{/if}
 </div>

@@ -1,9 +1,7 @@
 <script lang="ts">
-	export let level: 'safe' | 'warning' | 'danger' = 'safe';
-	export let message: string;
-	export let dismissable = true;
+	let { level = 'safe', message, dismissable = true }: { level?: 'safe' | 'warning' | 'danger'; message: string; dismissable?: boolean } = $props();
 
-	let dismissed = false;
+	let dismissed = $state(false);
 
 	const styles = {
 		safe: {

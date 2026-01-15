@@ -2,8 +2,7 @@
 	import type { ExperimentStep } from '$types';
 	import { labStore } from '$stores/lab';
 
-	export let steps: ExperimentStep[] = [];
-	export let currentStepIndex = 0;
+	let { steps = [], currentStepIndex = 0 }: { steps?: ExperimentStep[]; currentStepIndex?: number } = $props();
 </script>
 
 <div class="card p-4 space-y-4">

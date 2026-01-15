@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { formatNumber, getPHColor } from '$lib/utils/helpers';
 
-	export let pH: number = 7;
-	export let showScale: boolean = true;
+	let { pH = 7, showScale = true }: { pH?: number; showScale?: boolean } = $props();
 
 	let color = $derived(getPHColor(pH));
 	let position = $derived((pH / 14) * 100);

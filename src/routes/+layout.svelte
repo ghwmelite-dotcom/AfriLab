@@ -4,7 +4,7 @@
 	import { userStore } from '$stores/user';
 	import type { LayoutData } from './$types';
 
-	export let data: LayoutData;
+	let { data, children }: { data: LayoutData; children: any } = $props();
 
 	// Update user store with data from server
 	$effect(() => {
@@ -21,7 +21,7 @@
 </script>
 
 <div class="min-h-screen bg-void text-white">
-	<slot />
+	{@render children()}
 </div>
 
 <style>

@@ -94,11 +94,11 @@
 	};
 
 	// Simulation state
-	let titrationState: TitrationState = createInitialState(config);
-	let isPouring = false;
+	let titrationState: TitrationState = $state(createInitialState(config));
+	let isPouring = $state(false);
 	let pourInterval: ReturnType<typeof setInterval> | null = null;
-	let showResults = false;
-	let mounted = false;
+	let showResults = $state(false);
+	let mounted = $state(false);
 
 	// Initialize lab session
 	onMount(() => {

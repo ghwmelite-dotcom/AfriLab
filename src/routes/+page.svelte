@@ -10,7 +10,7 @@
 		}
 	});
 
-	let mounted = false;
+	let mounted = $state(false);
 	onMount(() => {
 		mounted = true;
 	});

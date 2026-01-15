@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getProgressiveHint, type HintResponse } from '$lib/server/ai-hints';
+	import { getProgressiveHint, type HintResponse } from '$lib/utils/hints';
 
 	interface Props {
 		experimentId: string;

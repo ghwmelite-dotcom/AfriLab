@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	let mounted = false;
-	let selectedPeriod = '7d';
+	let mounted = $state(false);
+	let selectedPeriod = $state('7d');
 
 	onMount(() => {
 		mounted = true;

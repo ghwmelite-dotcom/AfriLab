@@ -3,7 +3,7 @@
 	import { labStore } from '$stores/lab';
 	import { formatDateTime } from '$lib/utils/helpers';
 
-	let messageInput = '';
+	let messageInput = $state('');
 	let messagesContainer: HTMLDivElement;
 
 	async function sendMessage() {

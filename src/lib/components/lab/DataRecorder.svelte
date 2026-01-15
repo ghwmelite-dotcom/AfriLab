@@ -2,7 +2,7 @@
 	import { labStore } from '$stores/lab';
 	import { formatNumber } from '$lib/utils/helpers';
 
-	export let measurements: { type: string; value: number; unit: string; label?: string }[] = [];
+	let { measurements = [] }: { measurements?: { type: string; value: number; unit: string; label?: string }[] } = $props();
 
 	function downloadData() {
 		const data = measurements.map(m =>

@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { formatNumber } from '$lib/utils/helpers';
 
-	export let volume: number; // Current volume in mL
-	export let color: string = 'transparent'; // Solution color
-	export let pH: number = 7;
-	export let isReceiving: boolean = false; // Is receiving drops
+	let { volume, color = 'transparent', pH = 7, isReceiving = false }: {
+		volume: number;
+		color?: string;
+		pH?: number;
+		isReceiving?: boolean;
+	} = $props();
 
 	let fillPercent = $derived(Math.min((volume / 150) * 100, 80)); // Max 80% visual fill
 </script>

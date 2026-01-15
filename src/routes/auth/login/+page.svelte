@@ -4,9 +4,9 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
-	let loading = false;
-	let error = '';
-	let mounted = false;
+	let loading = $state(false);
+	let error = $state('');
+	let mounted = $state(false);
 
 	onMount(() => {
 		mounted = true;
