@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--color-background: 249 250 251;
+		--color-foreground: 17 24 39;
+	}
+
+	.dark {
+		--color-background: 17 24 39;
+		--color-foreground: 249 250 251;
+	}
+
+	body {
+		@apply antialiased;
+	}
+
+	/* Custom scrollbar */
+	::-webkit-scrollbar {
+		@apply w-2 h-2;
+	}
+
+	::-webkit-scrollbar-track {
+		@apply bg-gray-100 dark:bg-gray-800;
+	}
+
+	::-webkit-scrollbar-thumb {
+		@apply bg-gray-300 dark:bg-gray-600 rounded-full;
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		@apply bg-gray-400 dark:bg-gray-500;
+	}
+}
+
+@layer components {
+	/* Button variants */
+	.btn {
+		@apply inline-flex items-center justify-center gap-2 px-4 py-2
+			   font-medium rounded-lg transition-all duration-200
+			   focus:outline-none focus:ring-2 focus:ring-offset-2
+			   disabled:opacity-50 disabled:cursor-not-allowed;
+	}
+
+	.btn-primary {
+		@apply btn bg-primary-600 text-white hover:bg-primary-700
+			   focus:ring-primary-500 active:bg-primary-800;
+	}
+
+	.btn-secondary {
+		@apply btn bg-gray-200 text-gray-900 hover:bg-gray-300
+			   focus:ring-gray-500 dark:bg-gray-700 dark:text-gray-100;
+	}
+
+	.btn-danger {
+		@apply btn bg-red-600 text-white hover:bg-red-700
+			   focus:ring-red-500;
+	}
+
+	.btn-ghost {
+		@apply btn bg-transparent hover:bg-gray-100
+			   dark:hover:bg-gray-800 focus:ring-gray-500;
+	}
+
+	/* Card */
+	.card {
+		@apply bg-white dark:bg-gray-800 rounded-xl shadow-sm
+			   border border-gray-200 dark:border-gray-700;
+	}
+
+	/* Input */
+	.input {
+		@apply block w-full px-4 py-2.5 rounded-lg border border-gray-300
+			   bg-white dark:bg-gray-800 dark:border-gray-600
+			   text-gray-900 dark:text-gray-100
+			   placeholder-gray-400 dark:placeholder-gray-500
+			   focus:border-primary-500 focus:ring-primary-500 focus:ring-1
+			   transition-colors duration-200;
+	}
+
+	/* Lab-specific styles */
+	.lab-container {
+		@apply relative w-full h-full min-h-[600px] bg-gradient-to-b
+			   from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900
+			   rounded-xl overflow-hidden;
+	}
+
+	.lab-equipment {
+		@apply absolute cursor-pointer transition-transform duration-200
+			   hover:scale-105 active:scale-95;
+	}
+
+	/* Liquid colors */
+	.liquid-acid {
+		background: linear-gradient(180deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.9) 100%);
+	}
+
+	.liquid-base {
+		background: linear-gradient(180deg, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.9) 100%);
+	}
+
+	.liquid-neutral {
+		background: linear-gradient(180deg, rgba(168, 85, 247, 0.8) 0%, rgba(147, 51, 234, 0.9) 100%);
+	}
+
+	/* AI Chat bubble */
+	.chat-bubble {
+		@apply relative px-4 py-3 rounded-2xl max-w-[80%];
+	}
+
+	.chat-bubble-ai {
+		@apply chat-bubble bg-gray-100 dark:bg-gray-700 text-gray-900
+			   dark:text-gray-100 rounded-tl-sm;
+	}
+
+	.chat-bubble-user {
+		@apply chat-bubble bg-primary-600 text-white rounded-tr-sm ml-auto;
+	}
+
+	/* Safety indicators */
+	.safety-badge {
+		@apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full
+			   text-xs font-medium;
+	}
+
+	.safety-badge-safe {
+		@apply safety-badge bg-green-100 text-green-800
+			   dark:bg-green-900/30 dark:text-green-400;
+	}
+
+	.safety-badge-warning {
+		@apply safety-badge bg-yellow-100 text-yellow-800
+			   dark:bg-yellow-900/30 dark:text-yellow-400;
+	}
+
+	.safety-badge-danger {
+		@apply safety-badge bg-red-100 text-red-800
+			   dark:bg-red-900/30 dark:text-red-400;
+	}
+}
+
+@layer utilities {
+	/* Glass morphism */
+	.glass {
+		@apply bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg;
+	}
+
+	/* Gradient text */
+	.gradient-text {
+		@apply bg-gradient-to-r from-primary-600 to-secondary-500
+			   bg-clip-text text-transparent;
+	}
+}

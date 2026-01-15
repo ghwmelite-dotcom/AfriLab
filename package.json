@@ -1,0 +1,34 @@
+{
+  "name": "afrilab",
+  "version": "1.0.0",
+  "description": "Africa's foremost simulated science laboratory platform",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "wrangler pages dev .svelte-kit/cloudflare",
+    "deploy": "npm run build && wrangler pages deploy .svelte-kit/cloudflare",
+    "db:migrate": "wrangler d1 execute afrilab-db --local --file=./migrations/0001_initial_schema.sql",
+    "db:migrate:prod": "wrangler d1 execute afrilab-db --file=./migrations/0001_initial_schema.sql"
+  },
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.5"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-cloudflare": "^4.7.4",
+    "@sveltejs/kit": "^2.9.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/typography": "^0.5.15",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "svelte": "^5.2.0",
+    "tailwindcss": "^3.4.15",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.0",
+    "wrangler": "^3.91.0"
+  }
+}

@@ -1,0 +1,34 @@
+# AfriLab - Cloudflare Configuration
+name = "afrilab"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
+# D1 Database - SQLite at the edge
+[[d1_databases]]
+binding = "DB"
+database_name = "afrilab-db"
+database_id = "95be7e96-2937-4f88-9c05-51e277c1c023"
+
+# R2 Object Storage - For 3D models, videos, assets
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "afrilab-assets"
+
+# KV Namespace - For sessions and caching
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "db42293a406647be93d8426eb8cdc0aa"
+
+# Workers AI - Llama integration
+[ai]
+binding = "AI"
+
+# Environment variables
+[vars]
+APP_NAME = "AfriLab"
+APP_ENV = "development"
+
+# Production overrides
+[env.production.vars]
+APP_ENV = "production"
