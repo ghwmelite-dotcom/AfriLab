@@ -97,9 +97,12 @@
 	let isPouring = false;
 	let pourInterval: ReturnType<typeof setInterval> | null = null;
 	let showResults = false;
+	let mounted = false;
 
 	// Initialize lab session
 	onMount(() => {
+		mounted = true;
+
 		const session: LabSession = {
 			id: crypto.randomUUID(),
 			userId: '',
@@ -201,23 +204,34 @@
 	<title>Acid-Base Titration - AfriLab</title>
 </svelte:head>
 
-<div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+<!-- Ambient background -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+	<div class="absolute inset-0 bg-aurora opacity-30"></div>
+	<div class="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-l from-cyan-500/10 to-transparent rounded-full blur-3xl"></div>
+	<div class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-r from-emerald-500/10 to-transparent rounded-full blur-3xl"></div>
+</div>
+
+<div class="relative max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
 	<!-- Header -->
-	<div class="flex items-center justify-between mb-6">
+	<div class="flex items-center justify-between mb-6 {mounted ? 'animate-fade-in-up' : 'opacity-0'}">
 		<div>
-			<div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-1">
-				<a href="/dashboard" class="hover:text-primary-600">Dashboard</a>
-				<span>/</span>
-				<a href="/dashboard/labs" class="hover:text-primary-600">Labs</a>
-				<span>/</span>
-				<span>Chemistry</span>
+			<div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+				<a href="/dashboard" class="hover:text-emerald-400 transition-colors">Dashboard</a>
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+				</svg>
+				<a href="/dashboard/labs" class="hover:text-emerald-400 transition-colors">Labs</a>
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+				</svg>
+				<span class="text-emerald-400">Chemistry</span>
 			</div>
-			<h1 class="text-2xl font-bold text-gray-900 dark:text-white">{experiment.title}</h1>
+			<h1 class="text-2xl sm:text-3xl font-display font-bold text-white">{experiment.title}</h1>
 		</div>
 
 		<button
 			onclick={() => aiStore.open()}
-			class="btn-secondary"
+			class="btn-primary"
 		>
 			<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -227,7 +241,7 @@
 	</div>
 
 	<!-- Safety Banner -->
-	<div class="mb-6">
+	<div class="mb-6 {mounted ? 'animate-fade-in-up' : 'opacity-0'}" style="animation-delay: 0.1s;">
 		<SafetyBanner
 			level="warning"
 			message="Safety: Always add acid to water, never the reverse. Wear safety goggles and handle glassware carefully."
@@ -237,7 +251,7 @@
 	<!-- Main Layout -->
 	<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
 		<!-- Left Sidebar: Steps & Controls -->
-		<div class="lg:col-span-1 space-y-6">
+		<div class="lg:col-span-1 space-y-6 {mounted ? 'animate-fade-in-up' : 'opacity-0'}" style="animation-delay: 0.15s;">
 			<StepGuide
 				steps={experiment.instructions}
 				currentStepIndex={$labStore.currentStepIndex}
@@ -246,7 +260,7 @@
 		</div>
 
 		<!-- Center: Lab Simulation -->
-		<div class="lg:col-span-2">
+		<div class="lg:col-span-2 {mounted ? 'animate-fade-in-up' : 'opacity-0'}" style="animation-delay: 0.2s;">
 			<LabCanvas className="min-h-[500px]">
 				<div class="absolute inset-0 flex items-center justify-center gap-16 p-8">
 					<!-- Burette -->
@@ -269,48 +283,56 @@
 
 				<!-- Endpoint notification -->
 				{#if titrationState.endpointReached && !showResults}
-					<div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-bounce">
-						Endpoint reached! The solution turned pink.
+					<div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+						<div class="glass-strong rounded-xl px-6 py-3 border border-emerald-500/30 flex items-center gap-3 animate-bounce">
+							<div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+							<span class="text-emerald-400 font-medium">Endpoint reached! The solution turned pink.</span>
+						</div>
 					</div>
 				{/if}
 			</LabCanvas>
 
 			<!-- Results Panel -->
 			{#if showResults}
-				<div class="card p-6 mt-6">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-						Experiment Results
-					</h3>
+				<div class="glass-strong rounded-2xl p-6 mt-6 border border-white/10 animate-fade-in-up">
+					<div class="flex items-center gap-3 mb-6">
+						<div class="w-1.5 h-6 bg-gradient-to-b from-emerald-500 to-cyan-500 rounded-full"></div>
+						<h3 class="text-xl font-display font-semibold text-white">
+							Experiment Results
+						</h3>
+					</div>
 
-					<div class="grid grid-cols-2 gap-4 mb-4">
-						<div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-							<p class="text-sm text-gray-500 dark:text-gray-400">Volume Used</p>
-							<p class="text-2xl font-bold text-gray-900 dark:text-white">
+					<div class="grid grid-cols-2 gap-4 mb-6">
+						<div class="glass rounded-xl p-4 border border-white/5">
+							<p class="text-sm text-gray-400 mb-1">Volume Used</p>
+							<p class="text-2xl font-display font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
 								{analysis.volumeUsed.toFixed(2)} mL
 							</p>
 						</div>
-						<div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
-							<p class="text-sm text-gray-500 dark:text-gray-400">Expected Volume</p>
-							<p class="text-2xl font-bold text-gray-900 dark:text-white">
+						<div class="glass rounded-xl p-4 border border-white/5">
+							<p class="text-sm text-gray-400 mb-1">Expected Volume</p>
+							<p class="text-2xl font-display font-bold text-white">
 								{analysis.equivalenceVolume.toFixed(2)} mL
 							</p>
 						</div>
 					</div>
 
-					<div class="p-4 bg-primary-50 dark:bg-primary-900/20 rounded-lg mb-4">
-						<div class="flex items-center justify-between mb-2">
-							<span class="text-sm font-medium text-gray-700 dark:text-gray-300">Accuracy</span>
-							<span class="text-lg font-bold text-primary-600">{analysis.accuracy.toFixed(0)}%</span>
+					<div class="glass rounded-xl p-4 border border-emerald-500/20 mb-6">
+						<div class="flex items-center justify-between mb-3">
+							<span class="text-sm font-medium text-gray-300">Accuracy</span>
+							<span class="text-lg font-display font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+								{analysis.accuracy.toFixed(0)}%
+							</span>
 						</div>
-						<div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+						<div class="h-2 bg-white/5 rounded-full overflow-hidden">
 							<div
-								class="h-full bg-primary-600 transition-all"
+								class="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all rounded-full"
 								style="width: {analysis.accuracy}%"
 							></div>
 						</div>
 					</div>
 
-					<p class="text-gray-600 dark:text-gray-400 mb-4">{analysis.feedback}</p>
+					<p class="text-gray-400 mb-6">{analysis.feedback}</p>
 
 					<div class="flex gap-3">
 						<button
@@ -321,10 +343,16 @@
 							}}
 							class="btn-secondary flex-1"
 						>
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+							</svg>
 							Try Again
 						</button>
 						<a href="/dashboard" class="btn-primary flex-1 text-center">
 							Back to Dashboard
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+							</svg>
 						</a>
 					</div>
 				</div>
@@ -332,27 +360,36 @@
 		</div>
 
 		<!-- Right Sidebar: Data & pH -->
-		<div class="lg:col-span-1 space-y-6">
+		<div class="lg:col-span-1 space-y-6 {mounted ? 'animate-fade-in-up' : 'opacity-0'}" style="animation-delay: 0.25s;">
 			<PHMeter pH={titrationState.pH} />
 			<DataRecorder {measurements} />
 
 			<!-- Quick Stats -->
-			<div class="card p-4 space-y-3">
-				<h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Quick Stats</h4>
-				<div class="space-y-2 text-sm">
-					<div class="flex justify-between">
-						<span class="text-gray-500 dark:text-gray-400">Drops added</span>
-						<span class="font-medium text-gray-900 dark:text-white">{titrationState.dropCount}</span>
+			<div class="glass rounded-2xl p-5 border border-white/5">
+				<div class="flex items-center gap-3 mb-4">
+					<div class="w-1.5 h-5 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full"></div>
+					<h4 class="text-sm font-display font-semibold text-white">Quick Stats</h4>
+				</div>
+				<div class="space-y-3 text-sm">
+					<div class="flex justify-between items-center">
+						<span class="text-gray-400">Drops added</span>
+						<span class="font-medium text-white glass px-3 py-1 rounded-lg border border-white/5">{titrationState.dropCount}</span>
 					</div>
-					<div class="flex justify-between">
-						<span class="text-gray-500 dark:text-gray-400">Volume added</span>
-						<span class="font-medium text-gray-900 dark:text-white">{volumeUsed.toFixed(2)} mL</span>
+					<div class="flex justify-between items-center">
+						<span class="text-gray-400">Volume added</span>
+						<span class="font-medium text-white glass px-3 py-1 rounded-lg border border-white/5">{volumeUsed.toFixed(2)} mL</span>
 					</div>
-					<div class="flex justify-between">
-						<span class="text-gray-500 dark:text-gray-400">Status</span>
-						<span class="font-medium {titrationState.endpointReached ? 'text-green-600' : 'text-amber-600'}">
-							{titrationState.endpointReached ? 'Endpoint reached' : 'In progress'}
-						</span>
+					<div class="flex justify-between items-center">
+						<span class="text-gray-400">Status</span>
+						{#if titrationState.endpointReached}
+							<span class="px-3 py-1 rounded-lg text-xs font-medium bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+								Endpoint reached
+							</span>
+						{:else}
+							<span class="px-3 py-1 rounded-lg text-xs font-medium bg-amber-500/20 text-amber-400 border border-amber-500/30">
+								In progress
+							</span>
+						{/if}
 					</div>
 				</div>
 			</div>

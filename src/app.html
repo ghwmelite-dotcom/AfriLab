@@ -4,14 +4,89 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content="AfriLab - Africa's foremost simulated science laboratory platform for university courses" />
-		<meta name="theme-color" content="#16a34a" />
+		<meta name="theme-color" content="#080c15" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
+
+		<!-- Preconnect to font origins -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+		<!-- Plus Jakarta Sans (body) + Space Grotesk alternative: Outfit (display) -->
+		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
 		%sveltekit.head%
+
+		<style>
+			/* Critical CSS for instant dark background */
+			html, body {
+				background: #080c15;
+				margin: 0;
+				padding: 0;
+			}
+
+			/* Preloader */
+			.preloader {
+				position: fixed;
+				inset: 0;
+				background: #080c15;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 9999;
+				transition: opacity 0.5s ease, visibility 0.5s ease;
+			}
+
+			.preloader.loaded {
+				opacity: 0;
+				visibility: hidden;
+			}
+
+			.preloader-icon {
+				width: 60px;
+				height: 60px;
+				position: relative;
+			}
+
+			.preloader-icon::before {
+				content: '';
+				position: absolute;
+				inset: 0;
+				border: 3px solid rgba(34, 197, 94, 0.2);
+				border-top-color: #22c55e;
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+			}
+
+			.preloader-icon::after {
+				content: '';
+				position: absolute;
+				inset: 8px;
+				border: 3px solid rgba(20, 184, 166, 0.2);
+				border-bottom-color: #14b8a6;
+				border-radius: 50%;
+				animation: spin 1.5s linear infinite reverse;
+			}
+
+			@keyframes spin {
+				to { transform: rotate(360deg); }
+			}
+		</style>
 	</head>
-	<body class="h-full bg-gray-50 dark:bg-gray-900" data-sveltekit-preload-data="hover">
+	<body class="h-full" data-sveltekit-preload-data="hover">
+		<!-- Preloader -->
+		<div class="preloader" id="preloader">
+			<div class="preloader-icon"></div>
+		</div>
+
 		<div class="h-full" style="display: contents">%sveltekit.body%</div>
+
+		<script>
+			// Hide preloader when page is ready
+			window.addEventListener('load', () => {
+				setTimeout(() => {
+					document.getElementById('preloader')?.classList.add('loaded');
+				}, 300);
+			});
+		</script>
 	</body>
 </html>

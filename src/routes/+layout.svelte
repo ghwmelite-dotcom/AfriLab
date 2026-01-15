@@ -18,6 +18,12 @@
 	$: isLandingPage = $page.url.pathname === '/';
 </script>
 
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+<div class="min-h-screen bg-void text-white">
 	<slot />
 </div>
+
+<style>
+	.bg-void {
+		background: rgb(var(--color-void));
+	}
+</style>
