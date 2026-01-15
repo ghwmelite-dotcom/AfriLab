@@ -6,7 +6,7 @@
 	export let pH: number = 7;
 	export let isReceiving: boolean = false; // Is receiving drops
 
-	$: fillPercent = Math.min((volume / 150) * 100, 80); // Max 80% visual fill
+	let fillPercent = $derived(Math.min((volume / 150) * 100, 80)); // Max 80% visual fill
 </script>
 
 <div class="relative flex flex-col items-center">

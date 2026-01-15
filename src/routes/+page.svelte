@@ -4,9 +4,11 @@
 	import { onMount } from 'svelte';
 
 	// Redirect if already authenticated
-	$: if ($isAuthenticated) {
-		goto($currentUser?.role === 'instructor' ? '/instructor' : '/dashboard');
-	}
+	$effect(() => {
+		if ($isAuthenticated) {
+			goto($currentUser?.role === 'instructor' ? '/instructor' : '/dashboard');
+		}
+	});
 
 	let mounted = false;
 	onMount(() => {

@@ -190,15 +190,15 @@
 		});
 	}
 
-	$: volumeUsed = titrationState.buretteInitialVolume - titrationState.buretteVolume;
-	$: flaskVolume = config.acid.volume + volumeUsed;
-	$: analysis = analyzeTitration(titrationState);
-	$: measurements = titrationState.measurements.map((m, i) => ({
+	let volumeUsed = $derived(titrationState.buretteInitialVolume - titrationState.buretteVolume);
+	let flaskVolume = $derived(config.acid.volume + volumeUsed);
+	let analysis = $derived(analyzeTitration(titrationState));
+	let measurements = $derived(titrationState.measurements.map((m, i) => ({
 		type: 'pH',
 		value: m.pH,
 		unit: '',
 		label: `Reading ${i + 1} (${m.volumeAdded.toFixed(2)} mL)`
-	}));
+	})));
 </script>
 
 <svelte:head>

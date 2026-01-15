@@ -21,12 +21,12 @@
 		{ id: '8', name: 'Kofi Owusu', initials: 'KO', email: 'kofi.owusu@ashesi.edu.gh', labsCompleted: 5, avgScore: 77, lastActive: '2 weeks ago', status: 'inactive' }
 	];
 
-	$: filteredStudents = students.filter(s => {
+	let filteredStudents = $derived(students.filter(s => {
 		const matchesSearch = s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			s.email.toLowerCase().includes(searchQuery.toLowerCase());
 		const matchesFilter = filterStatus === 'all' || s.status === filterStatus;
 		return matchesSearch && matchesFilter;
-	});
+	}));
 
 	function getScoreColor(score: number): string {
 		if (score >= 90) return 'text-emerald-400';

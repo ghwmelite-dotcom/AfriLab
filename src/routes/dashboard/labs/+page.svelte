@@ -103,13 +103,13 @@
 		}
 	];
 
-	$: filteredExperiments = experiments.filter(exp => {
+	let filteredExperiments = $derived(experiments.filter(exp => {
 		const matchesDiscipline = selectedDiscipline === 'all' || exp.disciplineId === selectedDiscipline;
 		const matchesSearch = !searchQuery ||
 			exp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			exp.description.toLowerCase().includes(searchQuery.toLowerCase());
 		return matchesDiscipline && matchesSearch;
-	});
+	}));
 
 	function getDifficultyStyle(difficulty: string) {
 		switch (difficulty) {

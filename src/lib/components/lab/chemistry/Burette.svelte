@@ -7,8 +7,8 @@
 	export let onPour: () => void = () => {};
 	export let onStopPour: () => void = () => {};
 
-	$: fillPercent = (volume / maxVolume) * 100;
-	$: reading = maxVolume - volume; // Burette readings go from 0 at top
+	let fillPercent = $derived((volume / maxVolume) * 100);
+	let reading = $derived(maxVolume - volume); // Burette readings go from 0 at top
 </script>
 
 <div class="relative flex flex-col items-center">

@@ -23,7 +23,7 @@
 	};
 
 	// Password strength calculation
-	$: passwordStrength = calculatePasswordStrength(formData.password);
+	let passwordStrength = $derived(calculatePasswordStrength(formData.password));
 
 	function calculatePasswordStrength(password: string): { score: number; label: string; color: string } {
 		let score = 0;

@@ -26,7 +26,7 @@
 		}
 	};
 
-	$: style = styles[level];
+	let style = $derived(styles[level]);
 </script>
 
 {#if !dismissed}

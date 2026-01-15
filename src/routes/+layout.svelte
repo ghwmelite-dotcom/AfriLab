@@ -7,15 +7,17 @@
 	export let data: LayoutData;
 
 	// Update user store with data from server
-	$: if (data.user) {
-		userStore.setUser(data.user, data.session);
-	} else {
-		userStore.setUser(null, null);
-	}
+	$effect(() => {
+		if (data.user) {
+			userStore.setUser(data.user, data.session);
+		} else {
+			userStore.setUser(null, null);
+		}
+	});
 
 	// Check if current route is auth page
-	$: isAuthPage = $page.url.pathname.startsWith('/auth');
-	$: isLandingPage = $page.url.pathname === '/';
+	let isAuthPage = $derived($page.url.pathname.startsWith('/auth'));
+	let isLandingPage = $derived($page.url.pathname === '/');
 </script>
 
 <div class="min-h-screen bg-void text-white">

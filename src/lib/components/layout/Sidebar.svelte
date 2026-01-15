@@ -56,8 +56,8 @@
 		{ name: 'Medical', slug: 'medical', icon: 'heart', color: 'text-red-500' }
 	];
 
-	$: navItems = $isInstructor ? instructorNav : studentNav;
-	$: currentPath = $page.url.pathname;
+	let navItems = $derived($isInstructor ? instructorNav : studentNav);
+	let currentPath = $derived($page.url.pathname);
 </script>
 
 <aside class="fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">

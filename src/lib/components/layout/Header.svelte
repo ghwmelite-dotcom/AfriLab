@@ -6,7 +6,7 @@
 
 	export let showAIButton = false;
 
-	$: initials = $currentUser ? getInitials($currentUser.firstName, $currentUser.lastName) : '';
+	let initials = $derived($currentUser ? getInitials($currentUser.firstName, $currentUser.lastName) : '');
 
 	let userMenuOpen = false;
 </script>

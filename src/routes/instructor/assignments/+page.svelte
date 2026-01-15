@@ -91,12 +91,12 @@
 		{ id: 'phys-ohm', name: 'Ohm\'s Law', discipline: 'Physics' }
 	];
 
-	$: filteredAssignments = assignments.filter(a => {
+	let filteredAssignments = $derived(assignments.filter(a => {
 		const matchesSearch = a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			a.lab.toLowerCase().includes(searchQuery.toLowerCase());
 		const matchesFilter = filterStatus === 'all' || a.status === filterStatus;
 		return matchesSearch && matchesFilter;
-	});
+	}));
 
 	function getStatusStyle(status: string) {
 		switch (status) {

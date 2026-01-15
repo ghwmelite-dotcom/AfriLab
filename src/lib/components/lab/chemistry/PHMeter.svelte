@@ -4,8 +4,8 @@
 	export let pH: number = 7;
 	export let showScale: boolean = true;
 
-	$: color = getPHColor(pH);
-	$: position = (pH / 14) * 100;
+	let color = $derived(getPHColor(pH));
+	let position = $derived((pH / 14) * 100);
 </script>
 
 <div class="card p-4 space-y-3">

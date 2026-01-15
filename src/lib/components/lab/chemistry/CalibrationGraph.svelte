@@ -29,12 +29,12 @@
 	}
 
 	// Calculate regression line
-	$: regression = calculateCalibrationRegression(points);
-	$: lineStart = { x: 0, y: regression.intercept };
-	$: lineEnd = {
+	let regression = $derived(calculateCalibrationRegression(points));
+	let lineStart = $derived({ x: 0, y: regression.intercept });
+	let lineEnd = $derived({
 		x: maxConcentration,
 		y: regression.slope * maxConcentration + regression.intercept
-	};
+	});
 
 	// Generate axis ticks
 	const xTicks = [0, maxConcentration / 4, maxConcentration / 2, (3 * maxConcentration) / 4, maxConcentration];
