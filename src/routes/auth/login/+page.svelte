@@ -5,6 +5,7 @@
 	import { onMount } from 'svelte';
 
 	let loading = $state(false);
+	let demoLoading = $state<string | null>(null);
 	let error = $state('');
 	let mounted = $state(false);
 
@@ -13,6 +14,31 @@
 	});
 
 	const redirectTo = $page.url.searchParams.get('redirect') || '/dashboard';
+
+	async function demoLogin(role: 'student' | 'instructor' | 'admin') {
+		demoLoading = role;
+		error = '';
+
+		try {
+			const response = await fetch('/api/demo-login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ role })
+			});
+
+			const data = await response.json();
+
+			if (data.success) {
+				goto(data.redirect);
+			} else {
+				error = data.message || 'Demo login failed';
+			}
+		} catch (err) {
+			error = 'Failed to connect to demo service';
+		} finally {
+			demoLoading = null;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -65,16 +91,19 @@
 
 			<form
 				method="POST"
+				action="?/default"
 				class="space-y-6"
 				use:enhance={() => {
 					loading = true;
 					error = '';
-					return async ({ result }) => {
+					return async ({ result, update }) => {
 						loading = false;
 						if (result.type === 'failure') {
-							error = result.data?.message || 'Login failed';
+							error = (result.data as { message?: string })?.message || 'Login failed';
 						} else if (result.type === 'redirect') {
-							goto(redirectTo);
+							await update();
+						} else {
+							await update();
 						}
 					};
 				}}
@@ -168,23 +197,109 @@
 					<div class="w-full border-t border-white/10"></div>
 				</div>
 				<div class="relative flex justify-center text-sm">
-					<span class="px-4 bg-[rgba(8,12,21,0.8)] text-gray-500">Or continue with</span>
+					<span class="px-4 bg-[rgba(8,12,21,0.8)] text-gray-500">Or try demo access</span>
 				</div>
 			</div>
 
-			<div class="mt-6 grid grid-cols-2 gap-4">
-				<button type="button" class="btn-secondary">
-					<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-						<path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/>
-					</svg>
-					Google
+			<!-- Demo Access Buttons -->
+			<div class="mt-6 space-y-3">
+				<p class="text-xs text-center text-gray-500 mb-4">
+					Click any role below for instant demo access (no account needed)
+				</p>
+
+				<button
+					type="button"
+					onclick={() => demoLogin('student')}
+					disabled={demoLoading !== null}
+					class="w-full group relative overflow-hidden rounded-xl p-4 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 hover:border-emerald-400/50 transition-all duration-300"
+				>
+					<div class="absolute inset-0 bg-gradient-to-r from-emerald-500/0 to-cyan-500/0 group-hover:from-emerald-500/10 group-hover:to-cyan-500/10 transition-all duration-300"></div>
+					<div class="relative flex items-center gap-4">
+						<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+							<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+							</svg>
+						</div>
+						<div class="flex-1 text-left">
+							<div class="text-white font-medium">Student Demo</div>
+							<div class="text-sm text-gray-400">Access labs, run experiments, track progress</div>
+						</div>
+						{#if demoLoading === 'student'}
+							<svg class="animate-spin h-5 w-5 text-emerald-400" fill="none" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+						{:else}
+							<svg class="w-5 h-5 text-emerald-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+							</svg>
+						{/if}
+					</div>
 				</button>
-				<button type="button" class="btn-secondary">
-					<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-						<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-					</svg>
-					GitHub
+
+				<button
+					type="button"
+					onclick={() => demoLogin('instructor')}
+					disabled={demoLoading !== null}
+					class="w-full group relative overflow-hidden rounded-xl p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 hover:border-blue-400/50 transition-all duration-300"
+				>
+					<div class="absolute inset-0 bg-gradient-to-r from-blue-500/0 to-purple-500/0 group-hover:from-blue-500/10 group-hover:to-purple-500/10 transition-all duration-300"></div>
+					<div class="relative flex items-center gap-4">
+						<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+							<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+							</svg>
+						</div>
+						<div class="flex-1 text-left">
+							<div class="text-white font-medium">Instructor Demo</div>
+							<div class="text-sm text-gray-400">Manage classes, view analytics, grade work</div>
+						</div>
+						{#if demoLoading === 'instructor'}
+							<svg class="animate-spin h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+						{:else}
+							<svg class="w-5 h-5 text-blue-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+							</svg>
+						{/if}
+					</div>
 				</button>
+
+				<button
+					type="button"
+					onclick={() => demoLogin('admin')}
+					disabled={demoLoading !== null}
+					class="w-full group relative overflow-hidden rounded-xl p-4 bg-gradient-to-r from-amber-500/10 to-rose-500/10 border border-amber-500/30 hover:border-amber-400/50 transition-all duration-300"
+				>
+					<div class="absolute inset-0 bg-gradient-to-r from-amber-500/0 to-rose-500/0 group-hover:from-amber-500/10 group-hover:to-rose-500/10 transition-all duration-300"></div>
+					<div class="relative flex items-center gap-4">
+						<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-rose-500 flex items-center justify-center">
+							<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+							</svg>
+						</div>
+						<div class="flex-1 text-left">
+							<div class="text-white font-medium">Admin Demo</div>
+							<div class="text-sm text-gray-400">Full platform access, user management</div>
+						</div>
+						{#if demoLoading === 'admin'}
+							<svg class="animate-spin h-5 w-5 text-amber-400" fill="none" viewBox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+						{:else}
+							<svg class="w-5 h-5 text-amber-400 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+							</svg>
+						{/if}
+					</div>
+				</button>
+
+				<p class="text-xs text-center text-gray-600 mt-4">
+					Demo data is automatically cleared every 24 hours
+				</p>
 			</div>
 		</div>
 

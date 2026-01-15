@@ -32,3 +32,11 @@ APP_ENV = "development"
 # Production overrides
 [env.production.vars]
 APP_ENV = "production"
+
+# Note: For demo cleanup cron job, create a separate Cloudflare Worker
+# with the following trigger configuration:
+# [triggers]
+# crons = ["0 * * * *"]  # Run every hour
+#
+# The worker should call POST /api/demo-cleanup with X-Cron-Secret header
+# Set CRON_SECRET and SEED_SECRET in your Cloudflare dashboard secrets
