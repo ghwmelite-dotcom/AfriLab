@@ -204,13 +204,13 @@
 		labStore.reset();
 	}
 
-	$: analysis = analyzeResults(state, config);
-	$: measurements = state.measurements.map((m, i) => ({
+	let analysis = $derived(analyzeResults(state, config));
+	let measurements = $derived(state.measurements.map((m, i) => ({
 		type: 'absorbance',
 		value: m.absorbance,
 		unit: '',
 		label: `Reading ${i + 1}: ${(m.concentration * 1000).toFixed(2)} mM`
-	}));
+	})));
 </script>
 
 <svelte:head>
