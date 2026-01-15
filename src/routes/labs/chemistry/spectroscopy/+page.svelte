@@ -8,6 +8,7 @@
 	import DataRecorder from '$components/lab/DataRecorder.svelte';
 	import SafetyBanner from '$components/lab/SafetyBanner.svelte';
 	import StepGuide from '$components/lab/StepGuide.svelte';
+	import HintButton from '$components/ai/HintButton.svelte';
 
 	import Cuvette from '$components/lab/chemistry/Cuvette.svelte';
 	import SpectrophotometerDisplay from '$components/lab/chemistry/SpectrophotometerDisplay.svelte';
@@ -265,6 +266,21 @@
 				steps={experiment.instructions}
 				currentStepIndex={$labStore.currentStepIndex}
 			/>
+
+			<!-- AI Hint System -->
+			<div class="glass rounded-2xl p-4 border border-white/5">
+				<div class="flex items-center gap-3 mb-3">
+					<div class="w-1.5 h-5 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"></div>
+					<h4 class="text-sm font-display font-semibold text-white">Need Help?</h4>
+				</div>
+				<p class="text-xs text-gray-400 mb-3">Get progressive hints without giving away the answer.</p>
+				<HintButton
+					experimentId={experiment.id}
+					stepId={$labStore.currentStepIndex + 1}
+					stepTitle={experiment.instructions[$labStore.currentStepIndex]?.title}
+				/>
+			</div>
+
 			<ControlPanel onComplete={handleComplete} />
 		</div>
 
