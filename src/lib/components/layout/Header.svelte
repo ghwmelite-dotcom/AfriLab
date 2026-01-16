@@ -4,17 +4,40 @@
 	import { aiStore } from '$stores/ai';
 	import { getInitials } from '$lib/utils/helpers';
 
-	let { showAIButton = false }: { showAIButton?: boolean } = $props();
+	let {
+		showAIButton = false,
+		onMenuToggle
+	}: {
+		showAIButton?: boolean;
+		onMenuToggle?: () => void;
+	} = $props();
 
 	let initials = $derived($currentUser ? getInitials($currentUser.firstName, $currentUser.lastName) : '');
 
 	let userMenuOpen = $state(false);
+
+	function closeUserMenu() {
+		userMenuOpen = false;
+	}
 </script>
+
+<svelte:window on:click={closeUserMenu} />
 
 <header class="sticky top-0 z-40 glass-strong border-b border-white/5">
 	<div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-		<!-- Left: Logo and breadcrumb -->
-		<div class="flex items-center gap-4">
+		<!-- Left: Menu button and Logo -->
+		<div class="flex items-center gap-3">
+			<!-- Mobile menu button -->
+			<button
+				onclick={onMenuToggle}
+				class="lg:hidden p-2.5 rounded-xl glass border border-white/5 text-gray-400 hover:text-white hover:border-white/10 transition-all"
+				aria-label="Toggle menu"
+			>
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+				</svg>
+			</button>
+
 			<a href="/dashboard" class="flex items-center gap-3 group">
 				<div class="relative">
 					<div class="absolute inset-0 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl blur-md opacity-50 group-hover:opacity-75 transition-opacity"></div>
@@ -60,7 +83,7 @@
 			<!-- User Menu -->
 			<div class="relative ml-2">
 				<button
-					onclick={() => userMenuOpen = !userMenuOpen}
+					onclick={(e) => { e.stopPropagation(); userMenuOpen = !userMenuOpen; }}
 					class="flex items-center gap-3 p-1.5 pr-3 rounded-xl glass border border-white/5 hover:border-white/10 transition-all"
 				>
 					<div class="relative">
@@ -84,7 +107,10 @@
 
 				<!-- Dropdown menu -->
 				{#if userMenuOpen}
-					<div class="absolute right-0 mt-2 w-56 glass-strong rounded-2xl border border-white/10 shadow-2xl py-2 animate-fade-in-up">
+					<div
+						class="absolute right-0 mt-2 w-56 glass-strong rounded-2xl border border-white/10 shadow-2xl py-2 animate-fade-in-up"
+						onclick={(e) => e.stopPropagation()}
+					>
 						<div class="px-4 py-3 border-b border-white/5">
 							<p class="text-sm font-medium text-white">{$currentUser?.firstName} {$currentUser?.lastName}</p>
 							<p class="text-xs text-gray-400 truncate">{$currentUser?.email}</p>

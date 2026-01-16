@@ -4,6 +4,16 @@
 	import type { Snippet } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();
+
+	let sidebarOpen = $state(false);
+
+	function toggleSidebar() {
+		sidebarOpen = !sidebarOpen;
+	}
+
+	function closeSidebar() {
+		sidebarOpen = false;
+	}
 </script>
 
 <div class="min-h-screen bg-void relative overflow-hidden">
@@ -19,10 +29,10 @@
 	<!-- Subtle grid pattern overlay -->
 	<div class="fixed inset-0 pointer-events-none opacity-[0.02]" style="background-image: linear-gradient(rgba(34, 197, 94, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(34, 197, 94, 0.3) 1px, transparent 1px); background-size: 60px 60px;"></div>
 
-	<Header showAIButton={true} />
-	<Sidebar />
+	<Header showAIButton={true} onMenuToggle={toggleSidebar} />
+	<Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
-	<main class="relative pl-64 pt-16">
+	<main class="relative pt-16 lg:pl-72 min-h-screen">
 		<div class="relative">
 			{@render children()}
 		</div>
