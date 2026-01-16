@@ -17,6 +17,8 @@
 	import PHMeter from '$components/lab/chemistry/PHMeter.svelte';
 	import SaveProgressButton from '$components/lab/SaveProgressButton.svelte';
 	import ResumeLabDialog from '$components/lab/ResumeLabDialog.svelte';
+	import CollaborationButton from '$components/collaboration/CollaborationButton.svelte';
+	import CollaborationPanel from '$components/collaboration/CollaborationPanel.svelte';
 
 	import {
 		createInitialState,
@@ -293,6 +295,8 @@
 				/>
 			{/if}
 
+			<CollaborationButton labId={experiment.id} labName={experiment.title} />
+
 			<button
 				onclick={() => aiStore.open()}
 				class="btn-primary"
@@ -485,3 +489,6 @@
 		onStartFresh={handleStartFresh}
 	/>
 {/if}
+
+<!-- Collaboration Panel -->
+<CollaborationPanel />
