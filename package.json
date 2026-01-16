@@ -7,13 +7,17 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
-    "preview": "wrangler pages dev .svelte-kit/cloudflare",
+    "preview": "vite preview",
+    "preview:wrangler": "wrangler pages dev .svelte-kit/cloudflare",
     "deploy": "npm run build && wrangler pages deploy .svelte-kit/cloudflare",
     "db:migrate": "wrangler d1 execute afrilab-db --local --file=./migrations/0001_initial_schema.sql",
     "db:migrate:prod": "wrangler d1 execute afrilab-db --file=./migrations/0001_initial_schema.sql",
     "test": "vitest",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
     "@cloudflare/workers-types": "^4.20241127.0",
@@ -23,6 +27,7 @@
     "three": "^0.182.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "@sveltejs/adapter-cloudflare": "^4.7.4",
     "@sveltejs/kit": "^2.9.0",
     "@sveltejs/vite-plugin-svelte": "^5.1.1",
