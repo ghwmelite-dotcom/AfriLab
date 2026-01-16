@@ -744,4 +744,319 @@
 	.inner-glow-cyan {
 		box-shadow: inset 0 0 30px rgba(20, 184, 166, 0.15);
 	}
+
+	/* ============================================
+	   MICRO-INTERACTIONS
+	   ============================================ */
+
+	/* Magnetic hover effect */
+	.magnetic-hover {
+		transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.magnetic-hover:hover {
+		transform: scale(1.02);
+	}
+
+	.magnetic-hover:active {
+		transform: scale(0.98);
+	}
+
+	/* Press effect */
+	.press-effect {
+		transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.press-effect:hover {
+		transform: translateY(-2px);
+	}
+
+	.press-effect:active {
+		transform: translateY(1px) scale(0.98);
+	}
+
+	/* Ripple effect */
+	.ripple-effect {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.ripple-effect::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 0;
+		height: 0;
+		border-radius: 50%;
+		background: rgba(255, 255, 255, 0.2);
+		transform: translate(-50%, -50%);
+		transition: width 0.6s, height 0.6s;
+	}
+
+	.ripple-effect:active::before {
+		width: 200%;
+		height: 200%;
+	}
+
+	/* Bounce on click */
+	.bounce-click {
+		transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.bounce-click:active {
+		animation: bounce-click 0.4s ease;
+	}
+
+	@keyframes bounce-click {
+		0% { transform: scale(1); }
+		30% { transform: scale(0.95); }
+		50% { transform: scale(1.02); }
+		70% { transform: scale(0.98); }
+		100% { transform: scale(1); }
+	}
+
+	/* Highlight flash */
+	.highlight-flash {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.highlight-flash::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+		transform: translateX(-100%);
+		transition: none;
+	}
+
+	.highlight-flash:hover::after {
+		animation: highlight-sweep 0.8s ease;
+	}
+
+	@keyframes highlight-sweep {
+		0% { transform: translateX(-100%); }
+		100% { transform: translateX(100%); }
+	}
+
+	/* Focus ring glow */
+	.focus-glow:focus {
+		outline: none;
+		box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.3), 0 0 20px rgba(34, 197, 94, 0.2);
+	}
+
+	/* Smooth icon transition */
+	.icon-spin:hover svg {
+		animation: icon-spin 0.5s ease;
+	}
+
+	@keyframes icon-spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	.icon-bounce:hover svg {
+		animation: icon-bounce 0.5s ease;
+	}
+
+	@keyframes icon-bounce {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(-3px); }
+	}
+
+	.icon-pulse:hover svg {
+		animation: icon-pulse 0.5s ease;
+	}
+
+	@keyframes icon-pulse {
+		0%, 100% { transform: scale(1); }
+		50% { transform: scale(1.15); }
+	}
+
+	/* Card lift with shadow */
+	.lift-on-hover {
+		transition: transform 0.3s ease, box-shadow 0.3s ease;
+	}
+
+	.lift-on-hover:hover {
+		transform: translateY(-4px);
+		box-shadow:
+			0 20px 40px rgba(0, 0, 0, 0.3),
+			0 0 40px rgba(34, 197, 94, 0.1);
+	}
+
+	/* Slide indicator */
+	.slide-indicator {
+		position: relative;
+	}
+
+	.slide-indicator::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		width: 0;
+		height: 2px;
+		background: linear-gradient(90deg, #22c55e, #14b8a6);
+		transform: translateX(-50%);
+		transition: width 0.3s ease;
+	}
+
+	.slide-indicator:hover::after,
+	.slide-indicator.active::after {
+		width: 80%;
+	}
+
+	/* Tooltip float */
+	.tooltip-float {
+		position: relative;
+	}
+
+	.tooltip-float::before {
+		content: attr(data-tooltip);
+		position: absolute;
+		bottom: 100%;
+		left: 50%;
+		transform: translateX(-50%) translateY(10px);
+		padding: 6px 12px;
+		background: rgba(15, 23, 42, 0.95);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 8px;
+		font-size: 12px;
+		color: white;
+		white-space: nowrap;
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.2s ease;
+		z-index: 100;
+	}
+
+	.tooltip-float:hover::before {
+		opacity: 1;
+		visibility: visible;
+		transform: translateX(-50%) translateY(-8px);
+	}
+
+	/* Checkbox toggle animation */
+	.toggle-check {
+		transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.toggle-check:checked {
+		animation: toggle-pop 0.3s ease;
+	}
+
+	@keyframes toggle-pop {
+		0% { transform: scale(1); }
+		50% { transform: scale(1.2); }
+		100% { transform: scale(1); }
+	}
+
+	/* Slow spin */
+	.animate-slow-spin {
+		animation: slow-spin 30s linear infinite;
+	}
+
+	@keyframes slow-spin {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
+	}
+
+	/* Gradient conic */
+	.bg-gradient-conic {
+		background: conic-gradient(from 0deg, var(--tw-gradient-stops));
+	}
+
+	/* Number counter effect */
+	.counter-animate {
+		transition: all 0.3s ease;
+	}
+
+	.counter-animate:hover {
+		transform: scale(1.05);
+		text-shadow: 0 0 20px currentColor;
+	}
+
+	/* Badge pop */
+	.badge-pop {
+		animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	@keyframes badge-pop {
+		0% { transform: scale(0); opacity: 0; }
+		50% { transform: scale(1.2); }
+		100% { transform: scale(1); opacity: 1; }
+	}
+
+	/* Smooth fade transitions */
+	.fade-enter {
+		animation: fade-in 0.3s ease forwards;
+	}
+
+	.fade-exit {
+		animation: fade-out 0.3s ease forwards;
+	}
+
+	@keyframes fade-in {
+		from { opacity: 0; transform: translateY(10px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	@keyframes fade-out {
+		from { opacity: 1; transform: translateY(0); }
+		to { opacity: 0; transform: translateY(-10px); }
+	}
+
+	/* Interactive list items */
+	.list-item-interactive {
+		transition: all 0.2s ease;
+	}
+
+	.list-item-interactive:hover {
+		background: rgba(255, 255, 255, 0.03);
+		padding-left: 1.5rem;
+	}
+
+	/* Progress fill animation */
+	.progress-fill {
+		animation: progress-fill 1s ease-out forwards;
+	}
+
+	@keyframes progress-fill {
+		from { width: 0%; }
+	}
+
+	/* Skeleton shimmer */
+	.skeleton-shimmer {
+		background: linear-gradient(
+			90deg,
+			rgba(255, 255, 255, 0.03) 0%,
+			rgba(255, 255, 255, 0.08) 50%,
+			rgba(255, 255, 255, 0.03) 100%
+		);
+		background-size: 200% 100%;
+		animation: skeleton-shimmer 1.5s ease-in-out infinite;
+	}
+
+	@keyframes skeleton-shimmer {
+		0% { background-position: 200% 0; }
+		100% { background-position: -200% 0; }
+	}
+
+	/* Notification dot pulse */
+	.notification-pulse {
+		animation: notification-pulse 2s ease-in-out infinite;
+	}
+
+	@keyframes notification-pulse {
+		0%, 100% {
+			transform: scale(1);
+			box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+		}
+		50% {
+			transform: scale(1.1);
+			box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+		}
+	}
 }

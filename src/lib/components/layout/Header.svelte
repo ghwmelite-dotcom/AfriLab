@@ -3,6 +3,7 @@
 	import { currentUser } from '$stores/user';
 	import { aiStore } from '$stores/ai';
 	import { getInitials } from '$lib/utils/helpers';
+	import ThemeToggle from '$components/ui/ThemeToggle.svelte';
 
 	let {
 		showAIButton = false,
@@ -71,6 +72,9 @@
 					</span>
 				</button>
 			{/if}
+
+			<!-- Theme Toggle -->
+			<ThemeToggle />
 
 			<!-- Notifications -->
 			<button class="relative p-2.5 rounded-xl glass border border-white/5 text-gray-400 hover:text-white hover:border-white/10 transition-all">
