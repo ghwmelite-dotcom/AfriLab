@@ -29,9 +29,25 @@ binding = "AI"
 APP_NAME = "AfriLab"
 APP_ENV = "development"
 
-# Production overrides
-[env.production.vars]
-APP_ENV = "production"
+# Production environment - inherits all bindings and overrides vars
+[env.production]
+vars = { APP_NAME = "AfriLab", APP_ENV = "production" }
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "afrilab-db"
+database_id = "95be7e96-2937-4f88-9c05-51e277c1c023"
+
+[[env.production.r2_buckets]]
+binding = "STORAGE"
+bucket_name = "afrilab-assets"
+
+[[env.production.kv_namespaces]]
+binding = "SESSIONS"
+id = "db42293a406647be93d8426eb8cdc0aa"
+
+[env.production.ai]
+binding = "AI"
 
 # Note: For demo cleanup cron job, create a separate Cloudflare Worker
 # with the following trigger configuration:
