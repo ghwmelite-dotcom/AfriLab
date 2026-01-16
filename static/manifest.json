@@ -1,0 +1,105 @@
+{
+	"name": "AfriLab - Virtual Laboratory",
+	"short_name": "AfriLab",
+	"description": "Interactive virtual laboratory platform for science education in Africa",
+	"start_url": "/dashboard",
+	"display": "standalone",
+	"background_color": "#0a0a0f",
+	"theme_color": "#10b981",
+	"orientation": "portrait-primary",
+	"categories": ["education", "science"],
+	"lang": "en",
+	"dir": "ltr",
+	"scope": "/",
+	"icons": [
+		{
+			"src": "/icons/icon-72x72.png",
+			"sizes": "72x72",
+			"type": "image/png",
+			"purpose": "maskable any"
+		},
+		{
+			"src": "/icons/icon-96x96.png",
+			"sizes": "96x96",
+			"type": "image/png",
+			"purpose": "maskable any"
+		},
+		{
+			"src": "/icons/icon-128x128.png",
+			"sizes": "128x128",
+			"type": "image/png",
+			"purpose": "maskable any"
+		},
+		{
+			"src": "/icons/icon-144x144.png",
+			"sizes": "144x144",
+			"type": "image/png",
+			"purpose": "maskable any"
+		},
+		{
+			"src": "/icons/icon-152x152.png",
+			"sizes": "152x152",
+			"type": "image/png",
+			"purpose": "maskable any"
+		},
+		{
+			"src": "/icons/icon-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"purpose": "maskable any"
+		},
+		{
+			"src": "/icons/icon-384x384.png",
+			"sizes": "384x384",
+			"type": "image/png",
+			"purpose": "maskable any"
+		},
+		{
+			"src": "/icons/icon-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png",
+			"purpose": "maskable any"
+		}
+	],
+	"screenshots": [
+		{
+			"src": "/screenshots/dashboard.png",
+			"sizes": "1280x720",
+			"type": "image/png",
+			"form_factor": "wide",
+			"label": "AfriLab Dashboard"
+		},
+		{
+			"src": "/screenshots/lab.png",
+			"sizes": "1280x720",
+			"type": "image/png",
+			"form_factor": "wide",
+			"label": "Virtual Lab Experience"
+		}
+	],
+	"shortcuts": [
+		{
+			"name": "Chemistry Labs",
+			"short_name": "Chemistry",
+			"description": "Access chemistry experiments",
+			"url": "/dashboard/labs?category=chemistry",
+			"icons": [{ "src": "/icons/chemistry.png", "sizes": "96x96" }]
+		},
+		{
+			"name": "Biology Labs",
+			"short_name": "Biology",
+			"description": "Access biology experiments",
+			"url": "/dashboard/labs?category=biology",
+			"icons": [{ "src": "/icons/biology.png", "sizes": "96x96" }]
+		},
+		{
+			"name": "Physics Labs",
+			"short_name": "Physics",
+			"description": "Access physics experiments",
+			"url": "/dashboard/labs?category=physics",
+			"icons": [{ "src": "/icons/physics.png", "sizes": "96x96" }]
+		}
+	],
+	"related_applications": [],
+	"prefer_related_applications": false
+}

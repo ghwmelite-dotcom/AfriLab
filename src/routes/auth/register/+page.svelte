@@ -76,7 +76,7 @@
 	<div class="max-w-md w-full space-y-8">
 		<!-- Logo and header -->
 		<div class="text-center {mounted ? 'animate-fade-in-up' : 'opacity-0'}">
-			<a href="/" class="inline-block group">
+			<a href="/" class="inline-block group" aria-label="Go to AfriLab homepage">
 				<div class="flex justify-center">
 					<div class="relative">
 						<div class="absolute inset-0 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>
@@ -386,10 +386,10 @@
 							</p>
 						</div>
 
-						<div>
-							<label class="block text-sm font-medium text-gray-300 mb-3">
+						<fieldset>
+							<legend class="block text-sm font-medium text-gray-300 mb-3">
 								I am a...
-							</label>
+							</legend>
 							<div class="grid grid-cols-2 gap-4">
 								<label
 									class="group relative glass rounded-xl p-5 cursor-pointer transition-all duration-300 border-2
@@ -452,7 +452,7 @@
 									</div>
 								</label>
 							</div>
-						</div>
+						</fieldset>
 
 						<!-- Hidden fields to carry data -->
 						<input type="hidden" name="firstName" value={formData.firstName} />

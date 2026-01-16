@@ -59,7 +59,7 @@
 				<button
 					onclick={() => aiStore.toggle()}
 					class="relative p-2.5 rounded-xl glass border border-white/5 text-gray-400 hover:text-emerald-400 hover:border-emerald-500/30 transition-all group"
-					title="AI Lab Assistant"
+					aria-label="AI Lab Assistant"
 				>
 					<div class="absolute inset-0 rounded-xl bg-emerald-500/20 opacity-0 group-hover:opacity-100 transition-opacity blur-sm"></div>
 					<svg class="relative w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -77,7 +77,10 @@
 			<ThemeToggle />
 
 			<!-- Notifications -->
-			<button class="relative p-2.5 rounded-xl glass border border-white/5 text-gray-400 hover:text-white hover:border-white/10 transition-all">
+			<button
+				class="relative p-2.5 rounded-xl glass border border-white/5 text-gray-400 hover:text-white hover:border-white/10 transition-all"
+				aria-label="Notifications"
+			>
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
 				</svg>
@@ -89,6 +92,9 @@
 				<button
 					onclick={(e) => { e.stopPropagation(); userMenuOpen = !userMenuOpen; }}
 					class="flex items-center gap-3 p-1.5 pr-3 rounded-xl glass border border-white/5 hover:border-white/10 transition-all"
+					aria-label="User menu"
+					aria-expanded={userMenuOpen}
+					aria-haspopup="true"
 				>
 					<div class="relative">
 						<div class="absolute inset-0 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-lg blur-sm opacity-50"></div>
@@ -113,7 +119,10 @@
 				{#if userMenuOpen}
 					<div
 						class="absolute right-0 mt-2 w-56 glass-strong rounded-2xl border border-white/10 shadow-2xl py-2 animate-fade-in-up"
-						onclick={(e) => e.stopPropagation()}
+						role="menu"
+						aria-orientation="vertical"
+						tabindex="-1"
+						onkeydown={(e) => { if (e.key === 'Escape') { userMenuOpen = false; } }}
 					>
 						<div class="px-4 py-3 border-b border-white/5">
 							<p class="text-sm font-medium text-white">{$currentUser?.firstName} {$currentUser?.lastName}</p>
@@ -121,13 +130,13 @@
 						</div>
 
 						<div class="py-2">
-							<a href="/dashboard/profile" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+							<a href="/dashboard/profile" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
 								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 								</svg>
 								Profile Settings
 							</a>
-							<a href="/dashboard/progress" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
+							<a href="/dashboard/progress" role="menuitem" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/5 transition-colors">
 								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
 								</svg>
@@ -135,9 +144,9 @@
 							</a>
 						</div>
 
-						<div class="border-t border-white/5 pt-2">
-							<form action="/auth/logout" method="POST">
-								<button type="submit" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors">
+						<div class="border-t border-white/5 pt-2" role="none">
+							<form action="/auth/logout" method="POST" role="none">
+								<button type="submit" role="menuitem" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition-colors">
 									<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
 									</svg>

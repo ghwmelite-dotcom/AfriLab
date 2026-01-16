@@ -51,16 +51,15 @@
 		},
 		{
 			id: 'bio-micro-01',
-			title: 'Microscopy Basics',
-			description: 'Learn to use a compound microscope and identify cell structures.',
+			title: 'Cell Microscopy',
+			description: 'Learn to operate a compound microscope and identify cell structures in various biological samples.',
 			discipline: 'Biology',
 			disciplineId: 'bio',
-			difficulty: 'beginner',
-			duration: 30,
-			href: '#',
+			difficulty: 'intermediate',
+			duration: 45,
+			href: '/labs/biology/microscopy',
 			gradient: 'from-green-500 to-emerald-500',
-			icon: '🔬',
-			comingSoon: true
+			icon: '🔬'
 		},
 		{
 			id: 'bio-cell-01',
@@ -83,10 +82,9 @@
 			disciplineId: 'phys',
 			difficulty: 'beginner',
 			duration: 35,
-			href: '#',
+			href: '/labs/physics/ohms-law',
 			gradient: 'from-amber-500 to-orange-500',
-			icon: '⚡',
-			comingSoon: true
+			icon: '⚡'
 		},
 		{
 			id: 'pharm-compound-01',
@@ -96,10 +94,9 @@
 			disciplineId: 'pharm',
 			difficulty: 'intermediate',
 			duration: 60,
-			href: '#',
+			href: '/labs/pharmacy/compounding',
 			gradient: 'from-rose-500 to-pink-500',
-			icon: '💊',
-			comingSoon: true
+			icon: '💊'
 		}
 	];
 

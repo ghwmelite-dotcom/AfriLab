@@ -56,7 +56,7 @@
 	<div class="max-w-md w-full space-y-8">
 		<!-- Logo and header -->
 		<div class="text-center {mounted ? 'animate-fade-in-up' : 'opacity-0'}">
-			<a href="/" class="inline-block group">
+			<a href="/" class="inline-block group" aria-label="AfriLab home">
 				<div class="flex justify-center">
 					<div class="relative">
 						<div class="absolute inset-0 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-2xl blur-lg opacity-50 group-hover:opacity-75 transition-opacity"></div>

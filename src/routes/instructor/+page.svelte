@@ -10,7 +10,7 @@
 		mounted = true;
 	});
 
-	const stats = [
+	let stats = $derived([
 		{
 			label: 'Total Students',
 			value: data.studentCount || 0,
@@ -43,16 +43,16 @@
 			change: '+3%',
 			changeType: 'positive'
 		}
-	];
+	]);
 
 	// Mock recent activity data
-	const recentActivity = data.recentActivity || [
+	let recentActivity = $derived(data.recentActivity || [
 		{ studentName: 'Amina Okafor', studentInitials: 'AO', action: 'Completed Acid-Base Titration', time: '5 min ago', score: 94 },
 		{ studentName: 'Kwame Asante', studentInitials: 'KA', action: 'Started Spectroscopy Lab', time: '12 min ago', score: null },
 		{ studentName: 'Fatima Hassan', studentInitials: 'FH', action: 'Submitted Lab Report', time: '25 min ago', score: 87 },
 		{ studentName: 'David Mensah', studentInitials: 'DM', action: 'Completed Microscopy Basics', time: '1 hour ago', score: 91 },
 		{ studentName: 'Grace Nkrumah', studentInitials: 'GN', action: 'Asked AI for help', time: '2 hours ago', score: null }
-	];
+	]);
 
 	// Mock upcoming assignments
 	const upcomingAssignments = [

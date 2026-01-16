@@ -87,7 +87,7 @@
 		}
 	];
 
-	const stats = [
+	let stats = $derived([
 		{
 			value: data.stats?.completedLabs ?? 0,
 			label: 'Completed Labs',
@@ -124,7 +124,7 @@
 			ring: 'ring-purple-500/20',
 			glow: 'rgba(168, 85, 247, 0.2)'
 		}
-	];
+	]);
 </script>
 
 <svelte:head>

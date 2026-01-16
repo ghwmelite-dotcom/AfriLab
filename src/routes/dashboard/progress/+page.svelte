@@ -171,7 +171,7 @@
 				<h2 class="text-lg font-display font-semibold text-white">Achievements</h2>
 				<p class="text-sm text-gray-500">{achievements.filter(a => a.earned).length} of {achievements.length} unlocked</p>
 			</div>
-			<a href="#" class="text-sm text-emerald-400 hover:text-emerald-300 transition-colors">View all</a>
+			<a href="/dashboard/leaderboard" class="text-sm text-emerald-400 hover:text-emerald-300 transition-colors">View all</a>
 		</div>
 
 		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">

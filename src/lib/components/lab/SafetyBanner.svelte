@@ -76,6 +76,7 @@
 			<button
 				onclick={() => dismissed = true}
 				class="relative flex-shrink-0 p-1.5 rounded-lg glass border border-white/10 hover:border-white/20 {style.text} hover:opacity-70 transition-all"
+				aria-label="Dismiss safety message"
 			>
 				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

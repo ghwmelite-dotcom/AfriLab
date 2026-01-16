@@ -353,9 +353,9 @@
 			</div>
 
 			<div class="flex items-center gap-6 text-sm text-gray-400">
-				<a href="#" class="hover:text-emerald-400 transition-colors">Privacy</a>
-				<a href="#" class="hover:text-emerald-400 transition-colors">Terms</a>
-				<a href="#" class="hover:text-emerald-400 transition-colors">Contact</a>
+				<a href="/privacy" class="hover:text-emerald-400 transition-colors">Privacy</a>
+				<a href="/terms" class="hover:text-emerald-400 transition-colors">Terms</a>
+				<a href="/contact" class="hover:text-emerald-400 transition-colors">Contact</a>
 			</div>
 
 			<p class="text-sm text-gray-500">

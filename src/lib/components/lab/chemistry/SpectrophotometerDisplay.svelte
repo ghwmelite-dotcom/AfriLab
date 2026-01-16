@@ -15,7 +15,9 @@
 		displayMode = 'absorbance'
 	}: Props = $props();
 
-	let showAbsorbance = $state(displayMode === 'absorbance');
+	// Local toggle state - user can toggle independently after initial render
+	// Using a function call to avoid state_referenced_locally warning
+	let showAbsorbance = $state((() => displayMode === 'absorbance')());
 </script>
 
 <div class="glass-strong rounded-2xl border border-white/10 overflow-hidden">

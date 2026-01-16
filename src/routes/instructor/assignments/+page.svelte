@@ -375,6 +375,10 @@
 		<div
 			class="absolute inset-0 bg-black/60 backdrop-blur-sm"
 			onclick={() => showCreateModal = false}
+			onkeydown={(e) => e.key === 'Escape' && (showCreateModal = false)}
+			role="button"
+			tabindex="-1"
+			aria-label="Close modal"
 		></div>
 
 		<!-- Modal -->
@@ -384,6 +388,7 @@
 				<button
 					onclick={() => showCreateModal = false}
 					class="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-all"
+					aria-label="Close modal"
 				>
 					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -393,8 +398,9 @@
 
 			<form onsubmit={(e) => { e.preventDefault(); handleCreateAssignment(); }} class="space-y-5">
 				<div>
-					<label class="block text-sm font-medium text-gray-300 mb-2">Assignment Title</label>
+					<label for="assignment-title" class="block text-sm font-medium text-gray-300 mb-2">Assignment Title</label>
 					<input
+						id="assignment-title"
 						type="text"
 						class="input w-full"
 						placeholder="e.g., Acid-Base Titration Lab"
@@ -404,8 +410,9 @@
 				</div>
 
 				<div>
-					<label class="block text-sm font-medium text-gray-300 mb-2">Select Lab</label>
+					<label for="assignment-lab" class="block text-sm font-medium text-gray-300 mb-2">Select Lab</label>
 					<select
+						id="assignment-lab"
 						class="input w-full"
 						bind:value={newAssignment.lab}
 						required
@@ -419,8 +426,9 @@
 
 				<div class="grid grid-cols-2 gap-4">
 					<div>
-						<label class="block text-sm font-medium text-gray-300 mb-2">Due Date</label>
+						<label for="assignment-due-date" class="block text-sm font-medium text-gray-300 mb-2">Due Date</label>
 						<input
+							id="assignment-due-date"
 							type="date"
 							class="input w-full"
 							bind:value={newAssignment.dueDate}
@@ -428,8 +436,9 @@
 						/>
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-300 mb-2">Max Score</label>
+						<label for="assignment-max-score" class="block text-sm font-medium text-gray-300 mb-2">Max Score</label>
 						<input
+							id="assignment-max-score"
 							type="number"
 							class="input w-full"
 							placeholder="100"
@@ -441,8 +450,9 @@
 				</div>
 
 				<div>
-					<label class="block text-sm font-medium text-gray-300 mb-2">Instructions (Optional)</label>
+					<label for="assignment-instructions" class="block text-sm font-medium text-gray-300 mb-2">Instructions (Optional)</label>
 					<textarea
+						id="assignment-instructions"
 						class="input w-full h-24 resize-none"
 						placeholder="Add any specific instructions for students..."
 						bind:value={newAssignment.instructions}

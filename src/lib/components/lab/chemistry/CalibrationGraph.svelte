@@ -36,9 +36,9 @@
 		y: regression.slope * maxConcentration + regression.intercept
 	});
 
-	// Generate axis ticks
-	const xTicks = [0, maxConcentration / 4, maxConcentration / 2, (3 * maxConcentration) / 4, maxConcentration];
-	const yTicks = [0, maxAbsorbance / 4, maxAbsorbance / 2, (3 * maxAbsorbance) / 4, maxAbsorbance];
+	// Generate axis ticks (reactive to prop changes)
+	let xTicks = $derived([0, maxConcentration / 4, maxConcentration / 2, (3 * maxConcentration) / 4, maxConcentration]);
+	let yTicks = $derived([0, maxAbsorbance / 4, maxAbsorbance / 2, (3 * maxAbsorbance) / 4, maxAbsorbance]);
 </script>
 
 <div class="glass rounded-2xl p-5 border border-white/5">

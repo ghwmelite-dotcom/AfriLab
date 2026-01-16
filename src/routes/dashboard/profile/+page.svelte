@@ -86,7 +86,7 @@
 				<div class="relative w-24 h-24 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-3xl font-bold">
 					{initials}
 				</div>
-				<button class="absolute bottom-0 right-0 w-8 h-8 bg-white/10 backdrop-blur rounded-full flex items-center justify-center border border-white/20 hover:bg-white/20 transition-colors">
+				<button class="absolute bottom-0 right-0 w-8 h-8 bg-white/10 backdrop-blur rounded-full flex items-center justify-center border border-white/20 hover:bg-white/20 transition-colors" aria-label="Change profile photo">
 					<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -147,35 +147,35 @@
 
 					<div class="grid sm:grid-cols-2 gap-4">
 						<div>
-							<label class="block text-sm font-medium text-gray-300 mb-2">First Name</label>
-							<input type="text" class="input" bind:value={firstName} />
+							<label for="profile-first-name" class="block text-sm font-medium text-gray-300 mb-2">First Name</label>
+							<input id="profile-first-name" type="text" class="input" bind:value={firstName} />
 						</div>
 						<div>
-							<label class="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
-							<input type="text" class="input" bind:value={lastName} />
+							<label for="profile-last-name" class="block text-sm font-medium text-gray-300 mb-2">Last Name</label>
+							<input id="profile-last-name" type="text" class="input" bind:value={lastName} />
 						</div>
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
-						<input type="email" class="input" bind:value={email} disabled />
+						<label for="profile-email" class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+						<input id="profile-email" type="email" class="input" bind:value={email} disabled />
 						<p class="text-xs text-gray-500 mt-1">Contact support to change your email</p>
 					</div>
 
 					<div class="grid sm:grid-cols-2 gap-4">
 						<div>
-							<label class="block text-sm font-medium text-gray-300 mb-2">Institution</label>
-							<input type="text" class="input" bind:value={institution} />
+							<label for="profile-institution" class="block text-sm font-medium text-gray-300 mb-2">Institution</label>
+							<input id="profile-institution" type="text" class="input" bind:value={institution} />
 						</div>
 						<div>
-							<label class="block text-sm font-medium text-gray-300 mb-2">Department</label>
-							<input type="text" class="input" bind:value={department} />
+							<label for="profile-department" class="block text-sm font-medium text-gray-300 mb-2">Department</label>
+							<input id="profile-department" type="text" class="input" bind:value={department} />
 						</div>
 					</div>
 
 					<div>
-						<label class="block text-sm font-medium text-gray-300 mb-2">Bio</label>
-						<textarea class="input min-h-[100px] resize-none" placeholder="Tell us about yourself..." bind:value={bio}></textarea>
+						<label for="profile-bio" class="block text-sm font-medium text-gray-300 mb-2">Bio</label>
+						<textarea id="profile-bio" class="input min-h-[100px] resize-none" placeholder="Tell us about yourself..." bind:value={bio}></textarea>
 					</div>
 				</div>
 
