@@ -192,7 +192,7 @@
 	</div>
 
 	<!-- Stats Grid with premium cards -->
-	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 {mounted ? 'animate-fade-in-up' : 'opacity-0'}" style="animation-delay: 0.1s;">
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 {mounted ? 'animate-fade-in-up' : 'opacity-0'}" style="animation-delay: 0.1s;" data-tour="dashboard-stats">
 		{#each stats as stat, i}
 			<div
 				class="group relative glass-strong rounded-2xl p-6 transition-all duration-500 hover:-translate-y-1 shine-on-hover"

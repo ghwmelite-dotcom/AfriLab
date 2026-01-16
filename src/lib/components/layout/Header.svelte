@@ -60,6 +60,7 @@
 					onclick={() => aiStore.toggle()}
 					class="relative p-2.5 rounded-xl glass border border-white/5 text-gray-400 hover:text-emerald-400 hover:border-emerald-500/30 transition-all group"
 					aria-label="AI Lab Assistant"
+					data-tour="ai-button"
 				>
 					<div class="absolute inset-0 rounded-xl bg-emerald-500/20 opacity-0 group-hover:opacity-100 transition-opacity blur-sm"></div>
 					<svg class="relative w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

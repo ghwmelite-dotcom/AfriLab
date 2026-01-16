@@ -1,11 +1,14 @@
 <script lang="ts">
 	import Header from '$components/layout/Header.svelte';
 	import Sidebar from '$components/layout/Sidebar.svelte';
+	import OnboardingTour from '$components/onboarding/OnboardingTour.svelte';
+	import { onboardingStore } from '$stores/onboardingStore';
 	import type { Snippet } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();
 
 	let sidebarOpen = $state(false);
+	let showTour = $derived(onboardingStore.shouldShowTour);
 
 	function toggleSidebar() {
 		sidebarOpen = !sidebarOpen;
@@ -13,6 +16,14 @@
 
 	function closeSidebar() {
 		sidebarOpen = false;
+	}
+
+	function handleTourComplete() {
+		onboardingStore.completeTour();
+	}
+
+	function handleTourSkip() {
+		onboardingStore.skipTour();
 	}
 </script>
 
@@ -37,6 +48,11 @@
 			{@render children()}
 		</div>
 	</main>
+
+	<!-- Onboarding Tour -->
+	{#if showTour}
+		<OnboardingTour onComplete={handleTourComplete} onSkip={handleTourSkip} />
+	{/if}
 </div>
 
 <style>

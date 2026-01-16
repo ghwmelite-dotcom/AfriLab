@@ -102,6 +102,7 @@
 				<a
 					href={item.href}
 					onclick={handleNavClick}
+					data-tour={item.label === 'My Labs' ? 'labs-link' : item.label === 'Progress' ? 'leaderboard-link' : undefined}
 					class="group relative flex items-center gap-3.5 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300
 						{isActive
 						? 'bg-gradient-to-r from-emerald-500/15 to-cyan-500/10 text-white border border-emerald-500/20'
