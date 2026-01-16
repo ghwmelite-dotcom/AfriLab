@@ -1,18 +1,33 @@
 <script lang="ts">
 	import { isOnline, hasUpdate, applyUpdate } from '$lib/utils/pwa';
 	import { slide } from 'svelte/transition';
+	import { get } from 'svelte/store';
 
 	let showUpdateBanner = $state(false);
+	let online = $state(true);
+	let updateAvailable = $state(false);
 
 	$effect(() => {
-		if ($hasUpdate) {
-			showUpdateBanner = true;
-		}
+		// Subscribe to stores
+		const unsubOnline = isOnline.subscribe((value) => {
+			online = value;
+		});
+		const unsubUpdate = hasUpdate.subscribe((value) => {
+			updateAvailable = value;
+			if (value) {
+				showUpdateBanner = true;
+			}
+		});
+
+		return () => {
+			unsubOnline();
+			unsubUpdate();
+		};
 	});
 </script>
 
 <!-- Offline Banner -->
-{#if !$isOnline}
+{#if !online}
 	<div
 		transition:slide={{ duration: 200 }}
 		class="fixed top-0 left-0 right-0 z-[60] bg-gradient-to-r from-amber-500/90 to-orange-500/90 backdrop-blur-sm text-white py-2 px-4"

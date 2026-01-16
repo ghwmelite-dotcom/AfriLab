@@ -5,8 +5,10 @@
 
 	let dismissed = $state(false);
 	let installing = $state(false);
+	let installable = $state(false);
+	let installed = $state(false);
 
-	// Check if prompt was dismissed recently
+	// Check if prompt was dismissed recently and subscribe to stores
 	$effect(() => {
 		if (browser) {
 			const dismissedAt = localStorage.getItem('afrilab_install_dismissed');
@@ -19,14 +21,27 @@
 				}
 			}
 		}
+
+		// Subscribe to stores
+		const unsubInstallable = isInstallable.subscribe((value) => {
+			installable = value;
+		});
+		const unsubInstalled = isInstalled.subscribe((value) => {
+			installed = value;
+		});
+
+		return () => {
+			unsubInstallable();
+			unsubInstalled();
+		};
 	});
 
 	async function handleInstall() {
 		installing = true;
-		const installed = await installPWA();
+		const result = await installPWA();
 		installing = false;
 
-		if (!installed) {
+		if (!result) {
 			dismiss();
 		}
 	}
@@ -38,7 +53,7 @@
 		}
 	}
 
-	let shouldShow = $derived($isInstallable && !$isInstalled && !dismissed);
+	let shouldShow = $derived(installable && !installed && !dismissed);
 </script>
 
 {#if shouldShow}
