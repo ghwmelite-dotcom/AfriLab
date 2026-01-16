@@ -60,7 +60,7 @@ async function registerServiceWorker() {
 	}
 
 	try {
-		registration = await navigator.serviceWorker.register('/sw.js', {
+		registration = await navigator.serviceWorker.register('/service-worker.js', {
 			scope: '/'
 		});
 
