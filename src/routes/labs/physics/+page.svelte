@@ -8,6 +8,15 @@
 			difficulty: 'Beginner',
 			duration: '40 min',
 			gradient: 'from-amber-500 to-orange-600'
+		},
+		{
+			title: 'Projectile Motion',
+			description: 'Launch projectiles at different angles and velocities to explore kinematic equations and trajectory analysis.',
+			href: '/labs/physics/projectile-motion',
+			icon: 'rocket',
+			difficulty: 'Intermediate',
+			duration: '45 min',
+			gradient: 'from-orange-500 to-red-600'
 		}
 	];
 </script>
@@ -75,6 +84,6 @@
 	<!-- Coming Soon -->
 	<div class="mt-6 sm:mt-8 glass rounded-xl p-4 sm:p-6 border border-white/10">
 		<h3 class="text-lg font-semibold text-white mb-2">More Labs Coming Soon</h3>
-		<p class="text-gray-400 text-sm">We're developing additional physics labs including mechanics, optics, and thermodynamics experiments.</p>
+		<p class="text-gray-400 text-sm">We're developing additional physics labs including wave motion, optics, and thermodynamics experiments.</p>
 	</div>
 </div>

@@ -8,6 +8,15 @@
 			difficulty: 'Beginner',
 			duration: '30 min',
 			gradient: 'from-emerald-500 to-green-600'
+		},
+		{
+			title: 'Cell Division (Mitosis)',
+			description: 'Observe and identify the phases of mitosis in dividing cells, from interphase through cytokinesis.',
+			href: '/labs/biology/cell-division',
+			icon: 'cells',
+			difficulty: 'Intermediate',
+			duration: '45 min',
+			gradient: 'from-green-500 to-teal-600'
 		}
 	];
 </script>
@@ -75,6 +84,6 @@
 	<!-- Coming Soon -->
 	<div class="mt-6 sm:mt-8 glass rounded-xl p-4 sm:p-6 border border-white/10">
 		<h3 class="text-lg font-semibold text-white mb-2">More Labs Coming Soon</h3>
-		<p class="text-gray-400 text-sm">We're working on additional biology labs including cell division, genetics, and ecology experiments.</p>
+		<p class="text-gray-400 text-sm">We're working on additional biology labs including genetics, photosynthesis, and ecology experiments.</p>
 	</div>
 </div>
