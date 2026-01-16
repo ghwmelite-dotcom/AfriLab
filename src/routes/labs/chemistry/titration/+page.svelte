@@ -4,6 +4,7 @@
 	import { beforeNavigate } from '$app/navigation';
 	import { labStore } from '$stores/lab';
 	import { aiStore } from '$stores/ai';
+	import { currentUser } from '$stores/user';
 	import { labProgressStore, type SavedLabProgress } from '$stores/labProgress';
 
 	import LabCanvas from '$components/lab/LabCanvas.svelte';
@@ -19,6 +20,7 @@
 	import ResumeLabDialog from '$components/lab/ResumeLabDialog.svelte';
 	import CollaborationButton from '$components/collaboration/CollaborationButton.svelte';
 	import CollaborationPanel from '$components/collaboration/CollaborationPanel.svelte';
+	import Certificate from '$components/lab/Certificate.svelte';
 
 	import {
 		createInitialState,
@@ -26,6 +28,12 @@
 		analyzeTitration,
 		type TitrationConfig
 	} from '$lib/simulations/chemistry/titration';
+	import {
+		generateCertificateId,
+		calculateGrade,
+		calculateXP,
+		type CertificateData
+	} from '$lib/utils/certificate';
 	import type { TitrationState, Experiment, LabSession } from '$types';
 
 	// Experiment configuration
@@ -106,6 +114,9 @@
 	let showResults = $state(false);
 	let mounted = $state(false);
 	let hasRestoredProgress = $state(false);
+	let showCertificate = $state(false);
+	let labStartTime = $state(Date.now());
+	let certificateData: CertificateData | null = $state(null);
 
 	// Auto-save on navigation away
 	beforeNavigate(() => {
@@ -239,6 +250,32 @@
 			unit: 'mL',
 			label: 'Final Volume Used'
 		});
+
+		// Generate certificate data
+		const duration = Math.round((Date.now() - labStartTime) / 60000);
+		const score = Math.round(analysis.accuracy);
+		const grade = calculateGrade(score);
+		const xpEarned = calculateXP(score, 'beginner');
+
+		certificateData = {
+			studentName: $currentUser ? `${$currentUser.firstName} ${$currentUser.lastName}` : 'Student',
+			studentId: $currentUser?.id || 'N/A',
+			labTitle: experiment.title,
+			labDiscipline: 'Chemistry',
+			completionDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+			duration: duration || experiment.durationMinutes,
+			score,
+			grade,
+			xpEarned,
+			certificateId: generateCertificateId(),
+			institutionName: 'AfriLab Virtual Laboratory'
+		};
+	}
+
+	function handleShowCertificate() {
+		if (certificateData) {
+			showCertificate = true;
+		}
 	}
 
 	let volumeUsed = $derived(titrationState.buretteInitialVolume - titrationState.buretteVolume);
@@ -418,26 +455,47 @@
 
 					<p class="text-gray-400 mb-6">{analysis.feedback}</p>
 
-					<div class="flex gap-3">
-						<button
-							onclick={() => {
-								titrationState = createInitialState(config);
-								showResults = false;
-								labStore.reset();
-							}}
-							class="btn-secondary flex-1"
-						>
-							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-							</svg>
-							Try Again
-						</button>
-						<a href="/dashboard" class="btn-primary flex-1 text-center">
-							Back to Dashboard
-							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-							</svg>
-						</a>
+					<div class="flex flex-col gap-3">
+						<div class="flex gap-3">
+							<button
+								onclick={() => {
+									titrationState = createInitialState(config);
+									showResults = false;
+									certificateData = null;
+									labStartTime = Date.now();
+									labStore.reset();
+								}}
+								class="btn-secondary flex-1"
+							>
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+								</svg>
+								Try Again
+							</button>
+							{#if certificateData && certificateData.score >= 60}
+								<button
+									onclick={handleShowCertificate}
+									class="btn-primary flex-1 flex items-center justify-center gap-2"
+								>
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+									</svg>
+									Get Certificate
+								</button>
+							{:else}
+								<a href="/dashboard" class="btn-primary flex-1 text-center">
+									Back to Dashboard
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+									</svg>
+								</a>
+							{/if}
+						</div>
+						{#if certificateData && certificateData.score >= 60}
+							<a href="/dashboard" class="text-center text-sm text-gray-400 hover:text-white transition-colors">
+								Return to Dashboard
+							</a>
+						{/if}
 					</div>
 				</div>
 			{/if}
@@ -492,3 +550,11 @@
 
 <!-- Collaboration Panel -->
 <CollaborationPanel />
+
+<!-- Certificate Modal -->
+{#if showCertificate && certificateData}
+	<Certificate
+		{certificateData}
+		onClose={() => showCertificate = false}
+	/>
+{/if}

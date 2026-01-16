@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { labStore } from '$stores/lab';
 	import { aiStore } from '$stores/ai';
+	import { currentUser } from '$stores/user';
 
 	import LabCanvas from '$components/lab/LabCanvas.svelte';
 	import ControlPanel from '$components/lab/ControlPanel.svelte';
@@ -9,6 +10,7 @@
 	import SafetyBanner from '$components/lab/SafetyBanner.svelte';
 	import StepGuide from '$components/lab/StepGuide.svelte';
 	import HintButton from '$components/ai/HintButton.svelte';
+	import Certificate from '$components/lab/Certificate.svelte';
 
 	import Cuvette from '$components/lab/chemistry/Cuvette.svelte';
 	import SpectrophotometerDisplay from '$components/lab/chemistry/SpectrophotometerDisplay.svelte';
@@ -29,6 +31,12 @@
 		SAMPLE_LIBRARY,
 		type SpectroscopyConfig
 	} from '$lib/simulations/chemistry/spectroscopy';
+	import {
+		generateCertificateId,
+		calculateGrade,
+		calculateXP,
+		type CertificateData
+	} from '$lib/utils/certificate';
 	import type { Experiment, LabSession } from '$types';
 
 	// Experiment configuration
@@ -105,6 +113,9 @@
 	let state = $state(createInitialState(config));
 	let showResults = $state(false);
 	let mounted = $state(false);
+	let showCertificate = $state(false);
+	let labStartTime = $state(Date.now());
+	let certificateData: CertificateData | null = $state(null);
 
 	// Concentration presets for calibration
 	const concentrationPresets = [
@@ -196,11 +207,41 @@
 
 	function handleComplete() {
 		showResults = true;
+
+		// Generate certificate data
+		const duration = Math.round((Date.now() - labStartTime) / 60000);
+		// Calculate score based on percent error (lower is better)
+		const percentError = analysis.percentError;
+		const score = percentError <= 5 ? 100 : percentError <= 10 ? 85 : percentError <= 15 ? 70 : percentError <= 20 ? 60 : 50;
+		const grade = calculateGrade(score);
+		const xpEarned = calculateXP(score, 'intermediate');
+
+		certificateData = {
+			studentName: $currentUser ? `${$currentUser.firstName} ${$currentUser.lastName}` : 'Student',
+			studentId: $currentUser?.id || 'N/A',
+			labTitle: experiment.title,
+			labDiscipline: 'Chemistry',
+			completionDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+			duration: duration || experiment.durationMinutes,
+			score,
+			grade,
+			xpEarned,
+			certificateId: generateCertificateId(),
+			institutionName: 'AfriLab Virtual Laboratory'
+		};
+	}
+
+	function handleShowCertificate() {
+		if (certificateData) {
+			showCertificate = true;
+		}
 	}
 
 	function handleReset() {
 		state = createInitialState(config);
 		showResults = false;
+		certificateData = null;
+		labStartTime = Date.now();
 		labStore.reset();
 	}
 
@@ -511,19 +552,38 @@
 
 					<p class="text-gray-400 mb-6">{analysis.feedback}</p>
 
-					<div class="flex gap-3">
-						<button onclick={handleReset} class="btn-secondary flex-1">
-							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-							</svg>
-							Try Again
-						</button>
-						<a href="/dashboard" class="btn-primary flex-1 text-center">
-							Back to Dashboard
-							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-							</svg>
-						</a>
+					<div class="flex flex-col gap-3">
+						<div class="flex gap-3">
+							<button onclick={handleReset} class="btn-secondary flex-1">
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+								</svg>
+								Try Again
+							</button>
+							{#if certificateData && certificateData.score >= 60}
+								<button
+									onclick={handleShowCertificate}
+									class="btn-primary flex-1 flex items-center justify-center gap-2"
+								>
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+									</svg>
+									Get Certificate
+								</button>
+							{:else}
+								<a href="/dashboard" class="btn-primary flex-1 text-center">
+									Back to Dashboard
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+									</svg>
+								</a>
+							{/if}
+						</div>
+						{#if certificateData && certificateData.score >= 60}
+							<a href="/dashboard" class="text-center text-sm text-gray-400 hover:text-white transition-colors">
+								Return to Dashboard
+							</a>
+						{/if}
 					</div>
 				</div>
 			{/if}
@@ -556,3 +616,11 @@
 		</div>
 	</div>
 </div>
+
+<!-- Certificate Modal -->
+{#if showCertificate && certificateData}
+	<Certificate
+		{certificateData}
+		onClose={() => showCertificate = false}
+	/>
+{/if}
