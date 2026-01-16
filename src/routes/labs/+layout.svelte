@@ -39,27 +39,28 @@
 
 	<main class="relative pt-16">
 		<!-- Breadcrumb Navigation -->
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-			<nav class="flex items-center gap-2 text-sm" aria-label="Breadcrumb">
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
+			<nav class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm overflow-x-auto scrollbar-hide" aria-label="Breadcrumb">
 				{#each breadcrumbs() as crumb, i}
 					{#if i > 0}
-						<svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<svg class="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
 						</svg>
 					{/if}
 					{#if i === breadcrumbs().length - 1}
-						<span class="text-gray-400">{crumb.label}</span>
+						<span class="text-gray-400 whitespace-nowrap">{crumb.label}</span>
 					{:else}
 						<a
 							href={crumb.href}
-							class="text-gray-500 hover:text-white transition-colors flex items-center gap-1.5"
+							class="text-gray-500 hover:text-white transition-colors flex items-center gap-1 sm:gap-1.5 whitespace-nowrap"
 						>
 							{#if i === 0}
-								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
 								</svg>
 							{/if}
-							{crumb.label}
+							<span class="hidden sm:inline">{crumb.label}</span>
+							<span class="sm:hidden">{i === 0 ? '' : crumb.label.length > 10 ? crumb.label.slice(0, 8) + '...' : crumb.label}</span>
 						</a>
 					{/if}
 				{/each}

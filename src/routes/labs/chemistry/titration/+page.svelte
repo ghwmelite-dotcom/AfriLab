@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { beforeNavigate } from '$app/navigation';
 	import { labStore } from '$stores/lab';
 	import { aiStore } from '$stores/ai';
+	import { labProgressStore, type SavedLabProgress } from '$stores/labProgress';
 
 	import LabCanvas from '$components/lab/LabCanvas.svelte';
 	import ControlPanel from '$components/lab/ControlPanel.svelte';
@@ -13,6 +15,8 @@
 	import Burette from '$components/lab/chemistry/Burette.svelte';
 	import Flask from '$components/lab/chemistry/Flask.svelte';
 	import PHMeter from '$components/lab/chemistry/PHMeter.svelte';
+	import SaveProgressButton from '$components/lab/SaveProgressButton.svelte';
+	import ResumeLabDialog from '$components/lab/ResumeLabDialog.svelte';
 
 	import {
 		createInitialState,
@@ -99,10 +103,44 @@
 	let pourInterval: ReturnType<typeof setInterval> | null = null;
 	let showResults = $state(false);
 	let mounted = $state(false);
+	let hasRestoredProgress = $state(false);
+
+	// Auto-save on navigation away
+	beforeNavigate(() => {
+		if (!showResults && mounted && titrationState.dropCount > 0) {
+			autoSaveProgress();
+		}
+	});
+
+	function autoSaveProgress() {
+		labProgressStore.saveProgress(
+			experiment.id,
+			experiment.title,
+			'chemistry',
+			$labStore.currentStepIndex,
+			experiment.instructions.length,
+			titrationState,
+			measurements,
+			$labStore.notes
+		);
+	}
+
+	function handleResume(savedProgress: SavedLabProgress) {
+		hasRestoredProgress = true;
+		const restoredState = savedProgress.simulationState as TitrationState;
+		titrationState = restoredState;
+		labStore.goToStep(savedProgress.currentStep);
+	}
+
+	function handleStartFresh() {
+		hasRestoredProgress = true;
+		titrationState = createInitialState(config);
+	}
 
 	// Initialize lab session
 	onMount(() => {
 		mounted = true;
+		labProgressStore.init();
 
 		const session: LabSession = {
 			id: crypto.randomUUID(),
@@ -131,8 +169,16 @@
 			recentMeasurements: []
 		});
 
+		// Auto-save every 30 seconds
+		const autoSaveInterval = setInterval(() => {
+			if (!showResults && titrationState.dropCount > 0) {
+				autoSaveProgress();
+			}
+		}, 30000);
+
 		return () => {
 			if (pourInterval) clearInterval(pourInterval);
+			clearInterval(autoSaveInterval);
 		};
 	});
 
@@ -180,6 +226,9 @@
 	function handleComplete() {
 		const analysis = analyzeTitration(titrationState);
 		showResults = true;
+
+		// Clear saved progress on completion
+		labProgressStore.deleteProgress(experiment.id);
 
 		// Update session with score
 		labStore.addMeasurement({
@@ -230,15 +279,30 @@
 			<h1 class="text-2xl sm:text-3xl font-display font-bold text-white">{experiment.title}</h1>
 		</div>
 
-		<button
-			onclick={() => aiStore.open()}
-			class="btn-primary"
-		>
-			<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-			</svg>
-			Ask AI Assistant
-		</button>
+		<div class="flex items-center gap-3">
+			{#if !showResults}
+				<SaveProgressButton
+					labId={experiment.id}
+					labTitle={experiment.title}
+					discipline="chemistry"
+					currentStep={$labStore.currentStepIndex}
+					totalSteps={experiment.instructions.length}
+					simulationState={titrationState}
+					{measurements}
+					notes={$labStore.notes}
+				/>
+			{/if}
+
+			<button
+				onclick={() => aiStore.open()}
+				class="btn-primary"
+			>
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+				</svg>
+				Ask AI Assistant
+			</button>
+		</div>
 	</div>
 
 	<!-- Safety Banner -->
@@ -412,3 +476,12 @@
 		</div>
 	</div>
 </div>
+
+<!-- Resume Lab Dialog -->
+{#if !hasRestoredProgress}
+	<ResumeLabDialog
+		labId={experiment.id}
+		onResume={handleResume}
+		onStartFresh={handleStartFresh}
+	/>
+{/if}
