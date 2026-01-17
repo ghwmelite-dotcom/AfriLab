@@ -19,34 +19,40 @@ export const actions: Actions = {
 			return fail(400, { message: 'Email and password are required' });
 		}
 
-		// Get user by email
-		const userData = await getUserByEmail(DB, email);
+		try {
+			// Get user by email
+			const userData = await getUserByEmail(DB, email);
 
-		if (!userData) {
-			return fail(401, { message: 'Invalid email or password' });
+			if (!userData) {
+				return fail(401, { message: 'Invalid email or password' });
+			}
+
+			// Verify password
+			const isValid = await verifyPassword(password, userData.passwordHash);
+
+			if (!isValid) {
+				return fail(401, { message: 'Invalid email or password' });
+			}
+
+			// Create session
+			const session = await createSession(SESSIONS, userData.user.id);
+
+			// Set cookie
+			cookies.set('session', session.id, {
+				path: '/',
+				httpOnly: true,
+				secure: true,
+				sameSite: 'lax',
+				maxAge: 60 * 60 * 24 * 7 // 7 days
+			});
+
+			// Redirect based on role
+			const redirectPath = userData.user.role === 'instructor' ? '/instructor' : '/dashboard';
+			throw redirect(303, redirectPath);
+		} catch (error) {
+			if (error instanceof Response) throw error; // Re-throw redirects
+			console.error('Login error:', error);
+			return fail(500, { message: 'An error occurred during login. Please try again.' });
 		}
-
-		// Verify password
-		const isValid = await verifyPassword(password, userData.passwordHash);
-
-		if (!isValid) {
-			return fail(401, { message: 'Invalid email or password' });
-		}
-
-		// Create session
-		const session = await createSession(SESSIONS, userData.user.id);
-
-		// Set cookie
-		cookies.set('session', session.id, {
-			path: '/',
-			httpOnly: true,
-			secure: true,
-			sameSite: 'lax',
-			maxAge: 60 * 60 * 24 * 7 // 7 days
-		});
-
-		// Redirect based on role
-		const redirectPath = userData.user.role === 'instructor' ? '/instructor' : '/dashboard';
-		throw redirect(303, redirectPath);
 	}
 };

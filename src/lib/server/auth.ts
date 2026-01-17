@@ -122,18 +122,23 @@ export async function getSession(
 	kv: KVNamespace,
 	sessionId: string
 ): Promise<Session | null> {
-	const data = await kv.get(`session:${sessionId}`);
-	if (!data) return null;
+	try {
+		const data = await kv.get(`session:${sessionId}`);
+		if (!data) return null;
 
-	const session = JSON.parse(data) as Session;
-	session.expiresAt = new Date(session.expiresAt);
+		const session = JSON.parse(data) as Session;
+		session.expiresAt = new Date(session.expiresAt);
 
-	if (session.expiresAt < new Date()) {
-		await deleteSession(kv, sessionId);
+		if (session.expiresAt < new Date()) {
+			await deleteSession(kv, sessionId);
+			return null;
+		}
+
+		return session;
+	} catch (error) {
+		console.error('getSession error:', error);
 		return null;
 	}
-
-	return session;
 }
 
 /**
@@ -147,37 +152,15 @@ export async function deleteSession(kv: KVNamespace, sessionId: string): Promise
  * Get user from database by ID
  */
 export async function getUserById(db: D1Database, userId: string): Promise<User | null> {
-	const result = await db
-		.prepare('SELECT id, email, first_name, last_name, role, institution_id, created_at FROM users WHERE id = ?')
-		.bind(userId)
-		.first();
+	try {
+		const result = await db
+			.prepare('SELECT id, email, first_name, last_name, role, institution_id, created_at FROM users WHERE id = ?')
+			.bind(userId)
+			.first();
 
-	if (!result) return null;
+		if (!result) return null;
 
-	return {
-		id: result.id as string,
-		email: result.email as string,
-		firstName: result.first_name as string,
-		lastName: result.last_name as string,
-		role: result.role as 'student' | 'instructor' | 'admin',
-		institutionId: result.institution_id as string | null,
-		createdAt: new Date(result.created_at as string)
-	};
-}
-
-/**
- * Get user from database by email
- */
-export async function getUserByEmail(db: D1Database, email: string): Promise<{ user: User; passwordHash: string } | null> {
-	const result = await db
-		.prepare('SELECT id, email, password_hash, first_name, last_name, role, institution_id, created_at FROM users WHERE email = ?')
-		.bind(email.toLowerCase())
-		.first();
-
-	if (!result) return null;
-
-	return {
-		user: {
+		return {
 			id: result.id as string,
 			email: result.email as string,
 			firstName: result.first_name as string,
@@ -185,9 +168,41 @@ export async function getUserByEmail(db: D1Database, email: string): Promise<{ u
 			role: result.role as 'student' | 'instructor' | 'admin',
 			institutionId: result.institution_id as string | null,
 			createdAt: new Date(result.created_at as string)
-		},
-		passwordHash: result.password_hash as string
-	};
+		};
+	} catch (error) {
+		console.error('getUserById error:', error);
+		return null;
+	}
+}
+
+/**
+ * Get user from database by email
+ */
+export async function getUserByEmail(db: D1Database, email: string): Promise<{ user: User; passwordHash: string } | null> {
+	try {
+		const result = await db
+			.prepare('SELECT id, email, password_hash, first_name, last_name, role, institution_id, created_at FROM users WHERE email = ?')
+			.bind(email.toLowerCase())
+			.first();
+
+		if (!result) return null;
+
+		return {
+			user: {
+				id: result.id as string,
+				email: result.email as string,
+				firstName: result.first_name as string,
+				lastName: result.last_name as string,
+				role: result.role as 'student' | 'instructor' | 'admin',
+				institutionId: result.institution_id as string | null,
+				createdAt: new Date(result.created_at as string)
+			},
+			passwordHash: result.password_hash as string
+		};
+	} catch (error) {
+		console.error('getUserByEmail error:', error);
+		return null;
+	}
 }
 
 /**
@@ -238,12 +253,17 @@ export async function createUser(
  * Validate institution code and return institution ID
  */
 export async function validateInstitutionCode(db: D1Database, code: string): Promise<string | null> {
-	const result = await db
-		.prepare('SELECT id FROM institutions WHERE code = ?')
-		.bind(code.toUpperCase())
-		.first();
+	try {
+		const result = await db
+			.prepare('SELECT id FROM institutions WHERE code = ?')
+			.bind(code.toUpperCase())
+			.first();
 
-	return result ? (result.id as string) : null;
+		return result ? (result.id as string) : null;
+	} catch (error) {
+		console.error('validateInstitutionCode error:', error);
+		return null;
+	}
 }
 
 /**

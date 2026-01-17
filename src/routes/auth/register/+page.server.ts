@@ -33,22 +33,21 @@ export const actions: Actions = {
 			return fail(400, { message: 'Please enter a valid email address' });
 		}
 
-		// Check if email already exists
-		const existingUser = await getUserByEmail(DB, email);
-		if (existingUser) {
-			return fail(400, { message: 'An account with this email already exists' });
-		}
-
-		// Validate institution code if provided
-		let institutionId: string | undefined;
-		if (institutionCode) {
-			institutionId = await validateInstitutionCode(DB, institutionCode) ?? undefined;
-			if (!institutionId) {
-				return fail(400, { message: 'Invalid institution code. Please check and try again.' });
-			}
-		}
-
 		try {
+			// Check if email already exists
+			const existingUser = await getUserByEmail(DB, email);
+			if (existingUser) {
+				return fail(400, { message: 'An account with this email already exists' });
+			}
+
+			// Validate institution code if provided
+			let institutionId: string | undefined;
+			if (institutionCode) {
+				institutionId = await validateInstitutionCode(DB, institutionCode) ?? undefined;
+				if (!institutionId) {
+					return fail(400, { message: 'Invalid institution code. Please check and try again.' });
+				}
+			}
 			// Create user
 			const user = await createUser(DB, {
 				email,

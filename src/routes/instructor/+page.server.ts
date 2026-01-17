@@ -21,13 +21,24 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
 		};
 	}
 
-	const students = await getInstructorStudents(platform.env.DB, locals.user.id);
+	try {
+		const students = await getInstructorStudents(platform.env.DB, locals.user.id);
 
-	return {
-		studentCount: students.length,
-		activeLabsCount: 0, // Would be calculated from actual data
-		completedThisWeek: 0,
-		avgScore: null,
-		recentActivity: []
-	};
+		return {
+			studentCount: students.length,
+			activeLabsCount: 0, // Would be calculated from actual data
+			completedThisWeek: 0,
+			avgScore: null,
+			recentActivity: []
+		};
+	} catch (error) {
+		console.error('Instructor page load error:', error);
+		return {
+			studentCount: 0,
+			activeLabsCount: 0,
+			completedThisWeek: 0,
+			avgScore: null,
+			recentActivity: []
+		};
+	}
 };

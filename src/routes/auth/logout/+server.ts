@@ -13,8 +13,13 @@ export const POST: RequestHandler = async ({ request, platform, cookies }) => {
 	const sessionId = parseSessionCookie(request.headers.get('cookie'));
 
 	if (sessionId) {
-		// Delete session from KV
-		await deleteSession(SESSIONS, sessionId);
+		try {
+			// Delete session from KV
+			await deleteSession(SESSIONS, sessionId);
+		} catch (error) {
+			console.error('Logout error:', error);
+			// Continue with logout even if session deletion fails
+		}
 	}
 
 	// Clear cookie
@@ -33,7 +38,12 @@ export const GET: RequestHandler = async ({ request, platform, cookies }) => {
 	const sessionId = parseSessionCookie(request.headers.get('cookie'));
 
 	if (sessionId) {
-		await deleteSession(SESSIONS, sessionId);
+		try {
+			await deleteSession(SESSIONS, sessionId);
+		} catch (error) {
+			console.error('Logout error:', error);
+			// Continue with logout even if session deletion fails
+		}
 	}
 
 	cookies.delete('session', { path: '/' });

@@ -1,6 +1,18 @@
 import type { Experiment, LabSession, DashboardStats, ActivityItem, Measurement } from '$types';
 
 /**
+ * Safe JSON parse helper
+ */
+function safeJsonParse<T>(json: string | null | undefined, fallback: T): T {
+	if (!json) return fallback;
+	try {
+		return JSON.parse(json) as T;
+	} catch {
+		return fallback;
+	}
+}
+
+/**
  * Get all active disciplines
  */
 export async function getDisciplines(db: D1Database) {
@@ -20,59 +32,69 @@ export async function getDisciplines(db: D1Database) {
  * Get experiments by discipline
  */
 export async function getExperimentsByDiscipline(db: D1Database, disciplineId: string): Promise<Experiment[]> {
-	const result = await db
-		.prepare(`
-			SELECT id, discipline_id, title, slug, description, difficulty, duration_minutes,
-			       instructions, simulation_config, safety_notes, learning_objectives, thumbnail_url
-			FROM experiments
-			WHERE discipline_id = ? AND is_active = 1
-			ORDER BY difficulty, title
-		`)
-		.bind(disciplineId)
-		.all();
+	try {
+		const result = await db
+			.prepare(`
+				SELECT id, discipline_id, title, slug, description, difficulty, duration_minutes,
+				       instructions, simulation_config, safety_notes, learning_objectives, thumbnail_url
+				FROM experiments
+				WHERE discipline_id = ? AND is_active = 1
+				ORDER BY difficulty, title
+			`)
+			.bind(disciplineId)
+			.all();
 
-	return result.results.map((row) => ({
-		id: row.id as string,
-		disciplineId: row.discipline_id as string,
-		title: row.title as string,
-		description: row.description as string,
-		difficulty: row.difficulty as 'beginner' | 'intermediate' | 'advanced',
-		durationMinutes: row.duration_minutes as number,
-		instructions: JSON.parse(row.instructions as string || '[]'),
-		simulationConfig: JSON.parse(row.simulation_config as string || '{}'),
-		safetyNotes: row.safety_notes as string,
-		learningObjectives: JSON.parse(row.learning_objectives as string || '[]')
-	}));
+		return result.results.map((row) => ({
+			id: row.id as string,
+			disciplineId: row.discipline_id as string,
+			title: row.title as string,
+			description: row.description as string,
+			difficulty: row.difficulty as 'beginner' | 'intermediate' | 'advanced',
+			durationMinutes: row.duration_minutes as number,
+			instructions: safeJsonParse(row.instructions as string, []),
+			simulationConfig: safeJsonParse(row.simulation_config as string, {}),
+			safetyNotes: row.safety_notes as string,
+			learningObjectives: safeJsonParse(row.learning_objectives as string, [])
+		}));
+	} catch (error) {
+		console.error('getExperimentsByDiscipline error:', error);
+		return [];
+	}
 }
 
 /**
  * Get experiment by ID
  */
 export async function getExperimentById(db: D1Database, experimentId: string): Promise<Experiment | null> {
-	const result = await db
-		.prepare(`
-			SELECT id, discipline_id, title, slug, description, difficulty, duration_minutes,
-			       instructions, simulation_config, safety_notes, learning_objectives, thumbnail_url
-			FROM experiments
-			WHERE id = ?
-		`)
-		.bind(experimentId)
-		.first();
+	try {
+		const result = await db
+			.prepare(`
+				SELECT id, discipline_id, title, slug, description, difficulty, duration_minutes,
+				       instructions, simulation_config, safety_notes, learning_objectives, thumbnail_url
+				FROM experiments
+				WHERE id = ?
+			`)
+			.bind(experimentId)
+			.first();
 
-	if (!result) return null;
+		if (!result) return null;
 
-	return {
-		id: result.id as string,
-		disciplineId: result.discipline_id as string,
-		title: result.title as string,
-		description: result.description as string,
-		difficulty: result.difficulty as 'beginner' | 'intermediate' | 'advanced',
-		durationMinutes: result.duration_minutes as number,
-		instructions: JSON.parse(result.instructions as string || '[]'),
-		simulationConfig: JSON.parse(result.simulation_config as string || '{}'),
-		safetyNotes: result.safety_notes as string,
-		learningObjectives: JSON.parse(result.learning_objectives as string || '[]')
-	};
+		return {
+			id: result.id as string,
+			disciplineId: result.discipline_id as string,
+			title: result.title as string,
+			description: result.description as string,
+			difficulty: result.difficulty as 'beginner' | 'intermediate' | 'advanced',
+			durationMinutes: result.duration_minutes as number,
+			instructions: safeJsonParse(result.instructions as string, []),
+			simulationConfig: safeJsonParse(result.simulation_config as string, {}),
+			safetyNotes: result.safety_notes as string,
+			learningObjectives: safeJsonParse(result.learning_objectives as string, [])
+		};
+	} catch (error) {
+		console.error('getExperimentById error:', error);
+		return null;
+	}
 }
 
 /**
@@ -82,32 +104,37 @@ export async function createLabSession(
 	db: D1Database,
 	userId: string,
 	experimentId: string
-): Promise<LabSession> {
-	const id = crypto.randomUUID();
+): Promise<LabSession | null> {
+	try {
+		const id = crypto.randomUUID();
 
-	await db
-		.prepare(`
-			INSERT INTO lab_sessions (id, user_id, experiment_id, status, data)
-			VALUES (?, ?, ?, 'in_progress', '{}')
-		`)
-		.bind(id, userId, experimentId)
-		.run();
+		await db
+			.prepare(`
+				INSERT INTO lab_sessions (id, user_id, experiment_id, status, data)
+				VALUES (?, ?, ?, 'in_progress', '{}')
+			`)
+			.bind(id, userId, experimentId)
+			.run();
 
-	return {
-		id,
-		userId,
-		experimentId,
-		status: 'in_progress',
-		startedAt: new Date(),
-		completedAt: null,
-		data: {
-			currentStep: 0,
-			measurements: [],
-			notes: [],
-			actions: []
-		},
-		score: null
-	};
+		return {
+			id,
+			userId,
+			experimentId,
+			status: 'in_progress',
+			startedAt: new Date(),
+			completedAt: null,
+			data: {
+				currentStep: 0,
+				measurements: [],
+				notes: [],
+				actions: []
+			},
+			score: null
+		};
+	} catch (error) {
+		console.error('createLabSession error:', error);
+		return null;
+	}
 }
 
 /**
@@ -118,29 +145,34 @@ export async function getActiveSession(
 	userId: string,
 	experimentId: string
 ): Promise<LabSession | null> {
-	const result = await db
-		.prepare(`
-			SELECT id, user_id, experiment_id, status, current_step, data, score, started_at, completed_at
-			FROM lab_sessions
-			WHERE user_id = ? AND experiment_id = ? AND status = 'in_progress'
-			ORDER BY started_at DESC
-			LIMIT 1
-		`)
-		.bind(userId, experimentId)
-		.first();
+	try {
+		const result = await db
+			.prepare(`
+				SELECT id, user_id, experiment_id, status, current_step, data, score, started_at, completed_at
+				FROM lab_sessions
+				WHERE user_id = ? AND experiment_id = ? AND status = 'in_progress'
+				ORDER BY started_at DESC
+				LIMIT 1
+			`)
+			.bind(userId, experimentId)
+			.first();
 
-	if (!result) return null;
+		if (!result) return null;
 
-	return {
-		id: result.id as string,
-		userId: result.user_id as string,
-		experimentId: result.experiment_id as string,
-		status: result.status as 'in_progress' | 'completed' | 'abandoned',
-		startedAt: new Date(result.started_at as string),
-		completedAt: result.completed_at ? new Date(result.completed_at as string) : null,
-		data: JSON.parse(result.data as string || '{}'),
-		score: result.score as number | null
-	};
+		return {
+			id: result.id as string,
+			userId: result.user_id as string,
+			experimentId: result.experiment_id as string,
+			status: result.status as 'in_progress' | 'completed' | 'abandoned',
+			startedAt: new Date(result.started_at as string),
+			completedAt: result.completed_at ? new Date(result.completed_at as string) : null,
+			data: safeJsonParse(result.data as string, {}),
+			score: result.score as number | null
+		};
+	} catch (error) {
+		console.error('getActiveSession error:', error);
+		return null;
+	}
 }
 
 /**
@@ -155,41 +187,48 @@ export async function updateLabSession(
 		sessionData: object;
 		score: number;
 	}>
-): Promise<void> {
-	const updates: string[] = [];
-	const values: (string | number)[] = [];
+): Promise<boolean> {
+	try {
+		const updates: string[] = [];
+		const values: (string | number)[] = [];
 
-	if (data.status) {
-		updates.push('status = ?');
-		values.push(data.status);
-		if (data.status === 'completed') {
-			updates.push("completed_at = datetime('now')");
+		if (data.status) {
+			updates.push('status = ?');
+			values.push(data.status);
+			if (data.status === 'completed') {
+				updates.push("completed_at = datetime('now')");
+			}
 		}
+
+		if (data.currentStep !== undefined) {
+			updates.push('current_step = ?');
+			values.push(data.currentStep);
+		}
+
+		if (data.sessionData) {
+			updates.push('data = ?');
+			values.push(JSON.stringify(data.sessionData));
+		}
+
+		if (data.score !== undefined) {
+			updates.push('score = ?');
+			values.push(data.score);
+		}
+
+		if (updates.length === 0) return true;
+
+		values.push(sessionId);
+
+		await db
+			.prepare(`UPDATE lab_sessions SET ${updates.join(', ')} WHERE id = ?`)
+			.bind(...values)
+			.run();
+
+		return true;
+	} catch (error) {
+		console.error('updateLabSession error:', error);
+		return false;
 	}
-
-	if (data.currentStep !== undefined) {
-		updates.push('current_step = ?');
-		values.push(data.currentStep);
-	}
-
-	if (data.sessionData) {
-		updates.push('data = ?');
-		values.push(JSON.stringify(data.sessionData));
-	}
-
-	if (data.score !== undefined) {
-		updates.push('score = ?');
-		values.push(data.score);
-	}
-
-	if (updates.length === 0) return;
-
-	values.push(sessionId);
-
-	await db
-		.prepare(`UPDATE lab_sessions SET ${updates.join(', ')} WHERE id = ?`)
-		.bind(...values)
-		.run();
 }
 
 /**
@@ -199,16 +238,23 @@ export async function saveMeasurement(
 	db: D1Database,
 	sessionId: string,
 	measurement: Omit<Measurement, 'id' | 'timestamp'>
-): Promise<void> {
-	const id = crypto.randomUUID();
+): Promise<boolean> {
+	try {
+		const id = crypto.randomUUID();
 
-	await db
-		.prepare(`
-			INSERT INTO measurements (id, session_id, type, value, unit, label)
-			VALUES (?, ?, ?, ?, ?, ?)
-		`)
-		.bind(id, sessionId, measurement.type, measurement.value, measurement.unit, measurement.label || null)
-		.run();
+		await db
+			.prepare(`
+				INSERT INTO measurements (id, session_id, type, value, unit, label)
+				VALUES (?, ?, ?, ?, ?, ?)
+			`)
+			.bind(id, sessionId, measurement.type, measurement.value, measurement.unit, measurement.label || null)
+			.run();
+
+		return true;
+	} catch (error) {
+		console.error('saveMeasurement error:', error);
+		return false;
+	}
 }
 
 /**
@@ -277,48 +323,58 @@ export async function getDashboardStats(db: D1Database, userId: string): Promise
  * Get user's lab history
  */
 export async function getLabHistory(db: D1Database, userId: string, limit: number = 20) {
-	const result = await db
-		.prepare(`
-			SELECT ls.*, e.title, e.difficulty, d.name as discipline_name
-			FROM lab_sessions ls
-			JOIN experiments e ON ls.experiment_id = e.id
-			JOIN disciplines d ON e.discipline_id = d.id
-			WHERE ls.user_id = ?
-			ORDER BY ls.started_at DESC
-			LIMIT ?
-		`)
-		.bind(userId, limit)
-		.all();
+	try {
+		const result = await db
+			.prepare(`
+				SELECT ls.*, e.title, e.difficulty, d.name as discipline_name
+				FROM lab_sessions ls
+				JOIN experiments e ON ls.experiment_id = e.id
+				JOIN disciplines d ON e.discipline_id = d.id
+				WHERE ls.user_id = ?
+				ORDER BY ls.started_at DESC
+				LIMIT ?
+			`)
+			.bind(userId, limit)
+			.all();
 
-	return result.results;
+		return result.results;
+	} catch (error) {
+		console.error('getLabHistory error:', error);
+		return [];
+	}
 }
 
 /**
  * Get instructor's students
  */
 export async function getInstructorStudents(db: D1Database, instructorId: string) {
-	// Get institution ID of instructor
-	const instructor = await db
-		.prepare('SELECT institution_id FROM users WHERE id = ?')
-		.bind(instructorId)
-		.first();
+	try {
+		// Get institution ID of instructor
+		const instructor = await db
+			.prepare('SELECT institution_id FROM users WHERE id = ?')
+			.bind(instructorId)
+			.first();
 
-	if (!instructor?.institution_id) return [];
+		if (!instructor?.institution_id) return [];
 
-	const result = await db
-		.prepare(`
-			SELECT u.id, u.email, u.first_name, u.last_name,
-			       COUNT(ls.id) as total_labs,
-			       SUM(CASE WHEN ls.status = 'completed' THEN 1 ELSE 0 END) as completed_labs,
-			       AVG(ls.score) as avg_score
-			FROM users u
-			LEFT JOIN lab_sessions ls ON u.id = ls.user_id
-			WHERE u.institution_id = ? AND u.role = 'student'
-			GROUP BY u.id
-			ORDER BY u.last_name, u.first_name
-		`)
-		.bind(instructor.institution_id)
-		.all();
+		const result = await db
+			.prepare(`
+				SELECT u.id, u.email, u.first_name, u.last_name,
+				       COUNT(ls.id) as total_labs,
+				       SUM(CASE WHEN ls.status = 'completed' THEN 1 ELSE 0 END) as completed_labs,
+				       AVG(ls.score) as avg_score
+				FROM users u
+				LEFT JOIN lab_sessions ls ON u.id = ls.user_id
+				WHERE u.institution_id = ? AND u.role = 'student'
+				GROUP BY u.id
+				ORDER BY u.last_name, u.first_name
+			`)
+			.bind(instructor.institution_id)
+			.all();
 
-	return result.results;
+		return result.results;
+	} catch (error) {
+		console.error('getInstructorStudents error:', error);
+		return [];
+	}
 }
