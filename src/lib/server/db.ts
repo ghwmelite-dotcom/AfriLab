@@ -4,11 +4,16 @@ import type { Experiment, LabSession, DashboardStats, ActivityItem, Measurement 
  * Get all active disciplines
  */
 export async function getDisciplines(db: D1Database) {
-	const result = await db
-		.prepare('SELECT * FROM disciplines WHERE is_active = 1 ORDER BY name')
-		.all();
+	try {
+		const result = await db
+			.prepare('SELECT * FROM disciplines WHERE is_active = 1 ORDER BY name')
+			.all();
 
-	return result.results;
+		return result.results;
+	} catch (error) {
+		console.error('getDisciplines error:', error);
+		return [];
+	}
 }
 
 /**

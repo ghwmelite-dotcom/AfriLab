@@ -6,7 +6,11 @@ export const load: PageServerLoad = async ({ platform }) => {
 		return { disciplines: [] };
 	}
 
-	const disciplines = await getDisciplines(platform.env.DB);
-
-	return { disciplines };
+	try {
+		const disciplines = await getDisciplines(platform.env.DB);
+		return { disciplines };
+	} catch (error) {
+		console.error('Failed to load disciplines:', error);
+		return { disciplines: [] };
+	}
 };
