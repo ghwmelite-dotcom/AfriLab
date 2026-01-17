@@ -210,49 +210,62 @@ export async function saveMeasurement(
  * Get dashboard stats for a user
  */
 export async function getDashboardStats(db: D1Database, userId: string): Promise<DashboardStats> {
-	// Get lab counts
-	const counts = await db
-		.prepare(`
-			SELECT
-				COUNT(*) as total,
-				SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
-				SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress,
-				AVG(CASE WHEN score IS NOT NULL THEN score ELSE NULL END) as avg_score,
-				SUM(time_spent_seconds) as total_time
-			FROM lab_sessions
-			WHERE user_id = ?
-		`)
-		.bind(userId)
-		.first();
+	try {
+		// Get lab counts
+		const counts = await db
+			.prepare(`
+				SELECT
+					COUNT(*) as total,
+					SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
+					SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as in_progress,
+					AVG(CASE WHEN score IS NOT NULL THEN score ELSE NULL END) as avg_score,
+					SUM(time_spent_seconds) as total_time
+				FROM lab_sessions
+				WHERE user_id = ?
+			`)
+			.bind(userId)
+			.first();
 
-	// Get recent activity
-	const activity = await db
-		.prepare(`
-			SELECT ls.id, ls.status, ls.started_at, ls.completed_at, e.title
-			FROM lab_sessions ls
-			JOIN experiments e ON ls.experiment_id = e.id
-			WHERE ls.user_id = ?
-			ORDER BY ls.started_at DESC
-			LIMIT 5
-		`)
-		.bind(userId)
-		.all();
+		// Get recent activity
+		const activity = await db
+			.prepare(`
+				SELECT ls.id, ls.status, ls.started_at, ls.completed_at, e.title
+				FROM lab_sessions ls
+				JOIN experiments e ON ls.experiment_id = e.id
+				WHERE ls.user_id = ?
+				ORDER BY ls.started_at DESC
+				LIMIT 5
+			`)
+			.bind(userId)
+			.all();
 
-	const recentActivity: ActivityItem[] = activity.results.map((row) => ({
-		id: row.id as string,
-		type: row.status === 'completed' ? 'lab_completed' : 'lab_started',
-		title: row.title as string,
-		timestamp: new Date((row.completed_at || row.started_at) as string)
-	}));
+		const recentActivity: ActivityItem[] = activity.results.map((row) => ({
+			id: row.id as string,
+			type: row.status === 'completed' ? 'lab_completed' : 'lab_started',
+			title: row.title as string,
+			timestamp: new Date((row.completed_at || row.started_at) as string)
+		}));
 
-	return {
-		totalLabs: (counts?.total as number) || 0,
-		completedLabs: (counts?.completed as number) || 0,
-		inProgressLabs: (counts?.in_progress as number) || 0,
-		averageScore: (counts?.avg_score as number) || 0,
-		timeSpent: (counts?.total_time as number) || 0,
-		recentActivity
-	};
+		return {
+			totalLabs: (counts?.total as number) || 0,
+			completedLabs: (counts?.completed as number) || 0,
+			inProgressLabs: (counts?.in_progress as number) || 0,
+			averageScore: (counts?.avg_score as number) || 0,
+			timeSpent: (counts?.total_time as number) || 0,
+			recentActivity
+		};
+	} catch (error) {
+		console.error('getDashboardStats error:', error);
+		// Return empty stats on error
+		return {
+			totalLabs: 0,
+			completedLabs: 0,
+			inProgressLabs: 0,
+			averageScore: 0,
+			timeSpent: 0,
+			recentActivity: []
+		};
+	}
 }
 
 /**

@@ -6,7 +6,11 @@ export const load: PageServerLoad = async ({ locals, platform }) => {
 		return { stats: null };
 	}
 
-	const stats = await getDashboardStats(platform.env.DB, locals.user.id);
-
-	return { stats };
+	try {
+		const stats = await getDashboardStats(platform.env.DB, locals.user.id);
+		return { stats };
+	} catch (error) {
+		console.error('Failed to load dashboard stats:', error);
+		return { stats: null };
+	}
 };

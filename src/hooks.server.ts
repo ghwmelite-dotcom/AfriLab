@@ -18,17 +18,22 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const sessionId = parseSessionCookie(event.request.headers.get('cookie'));
 
 	if (sessionId) {
-		// Get session from KV
-		const session = await getSession(SESSIONS, sessionId);
+		try {
+			// Get session from KV
+			const session = await getSession(SESSIONS, sessionId);
 
-		if (session) {
-			// Get user from database
-			const user = await getUserById(DB, session.userId);
+			if (session) {
+				// Get user from database
+				const user = await getUserById(DB, session.userId);
 
-			if (user) {
-				event.locals.user = user;
-				event.locals.session = session;
+				if (user) {
+					event.locals.user = user;
+					event.locals.session = session;
+				}
 			}
+		} catch (error) {
+			console.error('Session validation error:', error);
+			// Continue without auth on error - let the page handle it
 		}
 	}
 
