@@ -24,31 +24,14 @@ id = "db42293a406647be93d8426eb8cdc0aa"
 [ai]
 binding = "AI"
 
-# Environment variables
+# Environment variables (local dev only)
+# Production vars are set in the Cloudflare Pages dashboard:
+#   GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET (encrypted secrets)
+#   GOOGLE_REDIRECT_URI = https://afrilab.pages.dev/auth/google/callback
 [vars]
 APP_NAME = "AfriLab"
 APP_ENV = "development"
 GOOGLE_REDIRECT_URI = "http://localhost:8788/auth/google/callback"
-
-# Production environment - inherits all bindings and overrides vars
-[env.production]
-vars = { APP_NAME = "AfriLab", APP_ENV = "production", GOOGLE_REDIRECT_URI = "https://afrilab.pages.dev/auth/google/callback" }
-
-[[env.production.d1_databases]]
-binding = "DB"
-database_name = "afrilab-db"
-database_id = "95be7e96-2937-4f88-9c05-51e277c1c023"
-
-[[env.production.r2_buckets]]
-binding = "STORAGE"
-bucket_name = "afrilab-assets"
-
-[[env.production.kv_namespaces]]
-binding = "SESSIONS"
-id = "db42293a406647be93d8426eb8cdc0aa"
-
-[env.production.ai]
-binding = "AI"
 
 # Note: For demo cleanup cron job, create a separate Cloudflare Worker
 # with the following trigger configuration:
