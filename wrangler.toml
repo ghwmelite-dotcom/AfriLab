@@ -32,7 +32,7 @@ GOOGLE_REDIRECT_URI = "http://localhost:8788/auth/google/callback"
 
 # Production environment - inherits all bindings and overrides vars
 [env.production]
-vars = { APP_NAME = "AfriLab", APP_ENV = "production", GOOGLE_REDIRECT_URI = "https://afrilab.example.com/auth/google/callback" }
+vars = { APP_NAME = "AfriLab", APP_ENV = "production", GOOGLE_REDIRECT_URI = "https://afrilab.pages.dev/auth/google/callback" }
 
 [[env.production.d1_databases]]
 binding = "DB"
