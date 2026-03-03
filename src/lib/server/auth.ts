@@ -154,7 +154,7 @@ export async function deleteSession(kv: KVNamespace, sessionId: string): Promise
 export async function getUserById(db: D1Database, userId: string): Promise<User | null> {
 	try {
 		const result = await db
-			.prepare('SELECT id, email, first_name, last_name, role, institution_id, created_at FROM users WHERE id = ?')
+			.prepare('SELECT id, email, first_name, last_name, role, institution_id, avatar_url, auth_provider, created_at FROM users WHERE id = ?')
 			.bind(userId)
 			.first();
 
@@ -167,6 +167,8 @@ export async function getUserById(db: D1Database, userId: string): Promise<User 
 			lastName: result.last_name as string,
 			role: result.role as 'student' | 'instructor' | 'admin',
 			institutionId: result.institution_id as string | null,
+			avatarUrl: (result.avatar_url as string | null) ?? undefined,
+			authProvider: (result.auth_provider as 'email' | 'google') ?? 'email',
 			createdAt: new Date(result.created_at as string)
 		};
 	} catch (error) {
@@ -181,7 +183,7 @@ export async function getUserById(db: D1Database, userId: string): Promise<User 
 export async function getUserByEmail(db: D1Database, email: string): Promise<{ user: User; passwordHash: string } | null> {
 	try {
 		const result = await db
-			.prepare('SELECT id, email, password_hash, first_name, last_name, role, institution_id, created_at FROM users WHERE email = ?')
+			.prepare('SELECT id, email, password_hash, first_name, last_name, role, institution_id, avatar_url, auth_provider, created_at FROM users WHERE email = ?')
 			.bind(email.toLowerCase())
 			.first();
 
@@ -195,6 +197,8 @@ export async function getUserByEmail(db: D1Database, email: string): Promise<{ u
 				lastName: result.last_name as string,
 				role: result.role as 'student' | 'instructor' | 'admin',
 				institutionId: result.institution_id as string | null,
+				avatarUrl: (result.avatar_url as string | null) ?? undefined,
+				authProvider: (result.auth_provider as 'email' | 'google') ?? 'email',
 				createdAt: new Date(result.created_at as string)
 			},
 			passwordHash: result.password_hash as string
@@ -247,6 +251,98 @@ export async function createUser(
 		institutionId: data.institutionId || null,
 		createdAt: new Date()
 	};
+}
+
+/**
+ * Get user from database by Google ID
+ */
+export async function getUserByGoogleId(db: D1Database, googleId: string): Promise<User | null> {
+	try {
+		const result = await db
+			.prepare('SELECT id, email, first_name, last_name, role, institution_id, avatar_url, auth_provider, created_at FROM users WHERE google_id = ?')
+			.bind(googleId)
+			.first();
+
+		if (!result) return null;
+
+		return {
+			id: result.id as string,
+			email: result.email as string,
+			firstName: result.first_name as string,
+			lastName: result.last_name as string,
+			role: result.role as 'student' | 'instructor' | 'admin',
+			institutionId: result.institution_id as string | null,
+			avatarUrl: (result.avatar_url as string | null) ?? undefined,
+			authProvider: result.auth_provider as 'email' | 'google',
+			createdAt: new Date(result.created_at as string)
+		};
+	} catch (error) {
+		console.error('getUserByGoogleId error:', error);
+		return null;
+	}
+}
+
+/**
+ * Create a new user via OAuth (no password required)
+ */
+export async function createOAuthUser(
+	db: D1Database,
+	data: {
+		email: string;
+		firstName: string;
+		lastName: string;
+		googleId: string;
+		avatarUrl?: string;
+		role?: 'student' | 'instructor' | 'admin';
+	}
+): Promise<User> {
+	const id = crypto.randomUUID();
+
+	await db
+		.prepare(
+			`INSERT INTO users (id, email, password_hash, first_name, last_name, role, google_id, avatar_url, auth_provider, email_verified)
+			 VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'google', 1)`
+		)
+		.bind(
+			id,
+			data.email.toLowerCase(),
+			'OAUTH_NO_PASSWORD',
+			data.firstName,
+			data.lastName,
+			data.role || 'student',
+			data.googleId,
+			data.avatarUrl || null
+		)
+		.run();
+
+	return {
+		id,
+		email: data.email.toLowerCase(),
+		firstName: data.firstName,
+		lastName: data.lastName,
+		role: data.role || 'student',
+		institutionId: null,
+		avatarUrl: data.avatarUrl,
+		authProvider: 'google',
+		createdAt: new Date()
+	};
+}
+
+/**
+ * Link a Google account to an existing email/password user
+ */
+export async function linkGoogleAccount(
+	db: D1Database,
+	userId: string,
+	googleId: string,
+	avatarUrl?: string
+): Promise<void> {
+	await db
+		.prepare(
+			`UPDATE users SET google_id = ?, avatar_url = COALESCE(avatar_url, ?), updated_at = datetime('now') WHERE id = ?`
+		)
+		.bind(googleId, avatarUrl || null, userId)
+		.run();
 }
 
 /**

@@ -6,6 +6,8 @@ export interface User {
 	lastName: string;
 	role: 'student' | 'instructor' | 'admin';
 	institutionId: string | null;
+	avatarUrl?: string;
+	authProvider?: 'email' | 'google';
 	createdAt: Date;
 }
 
