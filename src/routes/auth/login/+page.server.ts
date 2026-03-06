@@ -27,11 +27,9 @@ export const actions: Actions = {
 				return fail(401, { message: 'Invalid email or password' });
 			}
 
-			// Check if this is an OAuth-only account
+			// Check if this is an OAuth-only account (no password set)
 			if (userData.passwordHash === 'OAUTH_NO_PASSWORD') {
-				return fail(401, {
-					message: 'This account uses Google sign-in. Please use the "Sign in with Google" button.'
-				});
+				return fail(401, { message: 'Invalid email or password' });
 			}
 
 			// Verify password
