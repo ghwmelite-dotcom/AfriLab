@@ -12,7 +12,7 @@
 	});
 
 	const disciplines = [
-		{ id: 'all', name: 'All Labs', count: 28, icon: '🔬' },
+		{ id: 'all', name: 'All Labs', count: 29, icon: '🔬' },
 		{ id: 'chem', name: 'Chemistry', count: 6, icon: '🧪' },
 		{ id: 'bio', name: 'Biology', count: 7, icon: '🧬' },
 		{ id: 'phys', name: 'Physics', count: 6, icon: '⚡' },
@@ -49,7 +49,7 @@
 			href: '/labs/chemistry/chromatography',
 			gradient: 'from-teal-500 to-cyan-500',
 			icon: '🎨',
-			comingSoon: true
+
 		},
 		{
 			id: 'chem-spectro-01',
@@ -74,7 +74,7 @@
 			href: '/labs/chemistry/organic-synthesis',
 			gradient: 'from-emerald-500 to-teal-500',
 			icon: '💊',
-			comingSoon: true
+
 		},
 		{
 			id: 'chem-electro-01',
@@ -87,7 +87,7 @@
 			href: '/labs/chemistry/electrochemistry',
 			gradient: 'from-amber-500 to-yellow-500',
 			icon: '🔋',
-			comingSoon: true
+
 		},
 		{
 			id: 'chem-thermo-01',
@@ -100,7 +100,7 @@
 			href: '/labs/chemistry/calorimetry',
 			gradient: 'from-orange-500 to-red-500',
 			icon: '🔥',
-			comingSoon: true
+
 		},
 		// Biology
 		{
@@ -126,7 +126,7 @@
 			href: '/labs/biology/genetics',
 			gradient: 'from-lime-500 to-emerald-500',
 			icon: '🧬',
-			comingSoon: true
+
 		},
 		{
 			id: 'bio-cell-01',
@@ -151,7 +151,7 @@
 			href: '/labs/biology/enzyme-kinetics',
 			gradient: 'from-teal-500 to-cyan-500',
 			icon: '⚗️',
-			comingSoon: true
+
 		},
 		{
 			id: 'bio-photosynthesis-01',
@@ -164,7 +164,7 @@
 			href: '/labs/biology/photosynthesis',
 			gradient: 'from-yellow-500 to-green-500',
 			icon: '🌿',
-			comingSoon: true
+
 		},
 		{
 			id: 'bio-dna-01',
@@ -177,7 +177,7 @@
 			href: '/labs/biology/dna-extraction',
 			gradient: 'from-cyan-500 to-blue-500',
 			icon: '🧬',
-			comingSoon: true
+
 		},
 		{
 			id: 'bio-ecology-01',
@@ -190,7 +190,7 @@
 			href: '/labs/biology/ecosystem',
 			gradient: 'from-green-600 to-emerald-600',
 			icon: '🌍',
-			comingSoon: true
+
 		},
 		// Physics
 		{
@@ -216,7 +216,7 @@
 			href: '/labs/physics/pendulum',
 			gradient: 'from-yellow-500 to-amber-500',
 			icon: '🕐',
-			comingSoon: true
+
 		},
 		{
 			id: 'phys-projectile-01',
@@ -241,7 +241,7 @@
 			href: '/labs/physics/wave-motion',
 			gradient: 'from-blue-500 to-indigo-500',
 			icon: '🌊',
-			comingSoon: true
+
 		},
 		{
 			id: 'phys-optics-01',
@@ -254,7 +254,7 @@
 			href: '/labs/physics/optics',
 			gradient: 'from-violet-500 to-purple-500',
 			icon: '🔭',
-			comingSoon: true
+
 		},
 		{
 			id: 'phys-thermo-01',
@@ -267,7 +267,7 @@
 			href: '/labs/physics/thermodynamics',
 			gradient: 'from-red-500 to-rose-500',
 			icon: '🌡️',
-			comingSoon: true
+
 		},
 		// Pharmacy
 		{
@@ -281,7 +281,7 @@
 			href: '/labs/pharmacy/dosage-calculations',
 			gradient: 'from-fuchsia-500 to-pink-500',
 			icon: '🔢',
-			comingSoon: true
+
 		},
 		{
 			id: 'pharm-compound-01',
@@ -306,7 +306,7 @@
 			href: '/labs/pharmacy/drug-interactions',
 			gradient: 'from-rose-500 to-red-500',
 			icon: '⚠️',
-			comingSoon: true
+
 		},
 		{
 			id: 'pharm-quality-01',
@@ -319,7 +319,7 @@
 			href: '/labs/pharmacy/quality-control',
 			gradient: 'from-purple-500 to-violet-500',
 			icon: '✅',
-			comingSoon: true
+
 		},
 		{
 			id: 'pharm-pharma-01',
@@ -332,7 +332,7 @@
 			href: '/labs/pharmacy/pharmacokinetics',
 			gradient: 'from-indigo-500 to-blue-500',
 			icon: '📈',
-			comingSoon: true
+
 		},
 		// Medical Sciences
 		{
@@ -358,7 +358,7 @@
 			href: '/labs/medical/blood-analysis',
 			gradient: 'from-red-500 to-rose-500',
 			icon: '🩸',
-			comingSoon: true
+
 		},
 		{
 			id: 'med-ecg-01',
@@ -371,7 +371,7 @@
 			href: '/labs/medical/ecg-reading',
 			gradient: 'from-pink-500 to-fuchsia-500',
 			icon: '❤️',
-			comingSoon: true
+
 		},
 		{
 			id: 'med-patient-01',
@@ -384,7 +384,7 @@
 			href: '/labs/medical/patient-assessment',
 			gradient: 'from-orange-500 to-amber-500',
 			icon: '📋',
-			comingSoon: true
+
 		},
 		{
 			id: 'med-auscultation-01',
@@ -397,7 +397,7 @@
 			href: '/labs/medical/auscultation',
 			gradient: 'from-violet-500 to-purple-500',
 			icon: '🫀',
-			comingSoon: true
+
 		}
 	];
 

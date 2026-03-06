@@ -14,8 +14,7 @@
 			href: '/labs/biology/genetics',
 			difficulty: 'Beginner',
 			duration: '35 min',
-			gradient: 'from-lime-500 to-emerald-600',
-			comingSoon: true
+			gradient: 'from-lime-500 to-emerald-600'
 		},
 		{
 			title: 'Cell Division (Mitosis)',
@@ -31,8 +30,7 @@
 			href: '/labs/biology/enzyme-kinetics',
 			difficulty: 'Intermediate',
 			duration: '45 min',
-			gradient: 'from-teal-500 to-cyan-600',
-			comingSoon: true
+			gradient: 'from-teal-500 to-cyan-600'
 		},
 		{
 			title: 'Photosynthesis & Light Reactions',
@@ -40,8 +38,7 @@
 			href: '/labs/biology/photosynthesis',
 			difficulty: 'Intermediate',
 			duration: '50 min',
-			gradient: 'from-yellow-500 to-green-600',
-			comingSoon: true
+			gradient: 'from-yellow-500 to-green-600'
 		},
 		{
 			title: 'DNA Extraction & Electrophoresis',
@@ -49,8 +46,7 @@
 			href: '/labs/biology/dna-extraction',
 			difficulty: 'Advanced',
 			duration: '60 min',
-			gradient: 'from-cyan-500 to-blue-600',
-			comingSoon: true
+			gradient: 'from-cyan-500 to-blue-600'
 		},
 		{
 			title: 'Ecosystem Simulation',
@@ -58,8 +54,7 @@
 			href: '/labs/biology/ecosystem',
 			difficulty: 'Advanced',
 			duration: '55 min',
-			gradient: 'from-green-600 to-emerald-700',
-			comingSoon: true
+			gradient: 'from-green-600 to-emerald-700'
 		}
 	];
 </script>

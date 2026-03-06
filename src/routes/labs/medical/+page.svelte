@@ -14,8 +14,7 @@
 			href: '/labs/medical/blood-analysis',
 			difficulty: 'Beginner',
 			duration: '35 min',
-			gradient: 'from-red-500 to-rose-600',
-			comingSoon: true
+			gradient: 'from-red-500 to-rose-600'
 		},
 		{
 			title: 'ECG Reading & Interpretation',
@@ -23,8 +22,7 @@
 			href: '/labs/medical/ecg-reading',
 			difficulty: 'Intermediate',
 			duration: '45 min',
-			gradient: 'from-pink-500 to-fuchsia-600',
-			comingSoon: true
+			gradient: 'from-pink-500 to-fuchsia-600'
 		},
 		{
 			title: 'Patient Assessment & History',
@@ -32,8 +30,7 @@
 			href: '/labs/medical/patient-assessment',
 			difficulty: 'Intermediate',
 			duration: '50 min',
-			gradient: 'from-orange-500 to-amber-600',
-			comingSoon: true
+			gradient: 'from-orange-500 to-amber-600'
 		},
 		{
 			title: 'Heart & Lung Auscultation',
@@ -41,8 +38,7 @@
 			href: '/labs/medical/auscultation',
 			difficulty: 'Advanced',
 			duration: '45 min',
-			gradient: 'from-violet-500 to-purple-600',
-			comingSoon: true
+			gradient: 'from-violet-500 to-purple-600'
 		}
 	];
 </script>

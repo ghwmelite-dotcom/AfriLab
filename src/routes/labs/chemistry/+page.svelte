@@ -22,8 +22,7 @@
 			href: '/labs/chemistry/chromatography',
 			difficulty: 'Beginner',
 			duration: '40 min',
-			gradient: 'from-teal-500 to-cyan-600',
-			comingSoon: true
+			gradient: 'from-teal-500 to-cyan-600'
 		},
 		{
 			title: 'Organic Synthesis: Aspirin',
@@ -31,8 +30,7 @@
 			href: '/labs/chemistry/organic-synthesis',
 			difficulty: 'Intermediate',
 			duration: '60 min',
-			gradient: 'from-emerald-500 to-teal-600',
-			comingSoon: true
+			gradient: 'from-emerald-500 to-teal-600'
 		},
 		{
 			title: 'Electrochemistry & Galvanic Cells',
@@ -40,8 +38,7 @@
 			href: '/labs/chemistry/electrochemistry',
 			difficulty: 'Intermediate',
 			duration: '50 min',
-			gradient: 'from-amber-500 to-yellow-600',
-			comingSoon: true
+			gradient: 'from-amber-500 to-yellow-600'
 		},
 		{
 			title: 'Calorimetry & Thermochemistry',
@@ -49,8 +46,7 @@
 			href: '/labs/chemistry/calorimetry',
 			difficulty: 'Advanced',
 			duration: '55 min',
-			gradient: 'from-orange-500 to-red-600',
-			comingSoon: true
+			gradient: 'from-orange-500 to-red-600'
 		}
 	];
 </script>

@@ -14,8 +14,7 @@
 			href: '/labs/physics/pendulum',
 			difficulty: 'Beginner',
 			duration: '30 min',
-			gradient: 'from-yellow-500 to-amber-600',
-			comingSoon: true
+			gradient: 'from-yellow-500 to-amber-600'
 		},
 		{
 			title: 'Projectile Motion',
@@ -31,8 +30,7 @@
 			href: '/labs/physics/wave-motion',
 			difficulty: 'Intermediate',
 			duration: '40 min',
-			gradient: 'from-blue-500 to-indigo-600',
-			comingSoon: true
+			gradient: 'from-blue-500 to-indigo-600'
 		},
 		{
 			title: 'Optics: Lenses & Mirrors',
@@ -40,8 +38,7 @@
 			href: '/labs/physics/optics',
 			difficulty: 'Intermediate',
 			duration: '45 min',
-			gradient: 'from-violet-500 to-purple-600',
-			comingSoon: true
+			gradient: 'from-violet-500 to-purple-600'
 		},
 		{
 			title: 'Thermodynamics & Heat Transfer',
@@ -49,8 +46,7 @@
 			href: '/labs/physics/thermodynamics',
 			difficulty: 'Advanced',
 			duration: '50 min',
-			gradient: 'from-red-500 to-rose-600',
-			comingSoon: true
+			gradient: 'from-red-500 to-rose-600'
 		}
 	];
 </script>

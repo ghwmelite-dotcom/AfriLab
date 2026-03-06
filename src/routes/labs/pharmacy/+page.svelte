@@ -6,8 +6,7 @@
 			href: '/labs/pharmacy/dosage-calculations',
 			difficulty: 'Beginner',
 			duration: '40 min',
-			gradient: 'from-fuchsia-500 to-pink-600',
-			comingSoon: true
+			gradient: 'from-fuchsia-500 to-pink-600'
 		},
 		{
 			title: 'Pharmaceutical Compounding',
@@ -23,8 +22,7 @@
 			href: '/labs/pharmacy/drug-interactions',
 			difficulty: 'Intermediate',
 			duration: '50 min',
-			gradient: 'from-rose-500 to-red-600',
-			comingSoon: true
+			gradient: 'from-rose-500 to-red-600'
 		},
 		{
 			title: 'Quality Control Testing',
@@ -32,8 +30,7 @@
 			href: '/labs/pharmacy/quality-control',
 			difficulty: 'Advanced',
 			duration: '55 min',
-			gradient: 'from-purple-500 to-violet-600',
-			comingSoon: true
+			gradient: 'from-purple-500 to-violet-600'
 		},
 		{
 			title: 'Pharmacokinetics Simulation',
@@ -41,8 +38,7 @@
 			href: '/labs/pharmacy/pharmacokinetics',
 			difficulty: 'Advanced',
 			duration: '60 min',
-			gradient: 'from-indigo-500 to-blue-600',
-			comingSoon: true
+			gradient: 'from-indigo-500 to-blue-600'
 		}
 	];
 </script>
