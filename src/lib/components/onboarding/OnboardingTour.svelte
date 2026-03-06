@@ -222,7 +222,7 @@
 				left: ${tourSteps[currentStep].position === 'right' ? targetRect.right + 20 : tourSteps[currentStep].position === 'left' ? targetRect.left - 380 : targetRect.left + targetRect.width / 2 - 180}px;
 			` : ''}
 		>
-			<div class="glass-strong rounded-2xl border border-emerald-500/30 overflow-hidden animate-fade-in-up">
+			<div class="rounded-2xl border border-emerald-500/30 overflow-hidden animate-fade-in-up" style="background: rgba(12, 17, 29, 0.97); box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.15) inset, 0 25px 50px -12px rgba(0, 0, 0, 0.6);">
 				<!-- Header -->
 				<div class="p-5 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 border-b border-white/10">
 					<div class="flex items-center gap-3">
