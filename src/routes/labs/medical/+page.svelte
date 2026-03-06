@@ -4,10 +4,45 @@
 			title: 'Vital Signs Assessment',
 			description: 'Learn to measure and interpret patient vital signs including blood pressure, heart rate, respiratory rate, and more.',
 			href: '/labs/medical/vital-signs',
-			icon: 'heart',
 			difficulty: 'Beginner',
 			duration: '30 min',
 			gradient: 'from-rose-500 to-red-600'
+		},
+		{
+			title: 'Blood Typing & Analysis',
+			description: 'Determine blood types using simulated antigen-antibody reactions and understand transfusion compatibility.',
+			href: '/labs/medical/blood-analysis',
+			difficulty: 'Beginner',
+			duration: '35 min',
+			gradient: 'from-red-500 to-rose-600',
+			comingSoon: true
+		},
+		{
+			title: 'ECG Reading & Interpretation',
+			description: 'Learn to read and interpret electrocardiogram traces, identifying normal sinus rhythm and common arrhythmias.',
+			href: '/labs/medical/ecg-reading',
+			difficulty: 'Intermediate',
+			duration: '45 min',
+			gradient: 'from-pink-500 to-fuchsia-600',
+			comingSoon: true
+		},
+		{
+			title: 'Patient Assessment & History',
+			description: 'Practice conducting a systematic patient assessment including history taking and clinical reasoning.',
+			href: '/labs/medical/patient-assessment',
+			difficulty: 'Intermediate',
+			duration: '50 min',
+			gradient: 'from-orange-500 to-amber-600',
+			comingSoon: true
+		},
+		{
+			title: 'Heart & Lung Auscultation',
+			description: 'Learn proper stethoscope technique and identify normal and abnormal heart and lung sounds.',
+			href: '/labs/medical/auscultation',
+			difficulty: 'Advanced',
+			duration: '45 min',
+			gradient: 'from-violet-500 to-purple-600',
+			comingSoon: true
 		}
 	];
 </script>
@@ -36,8 +71,9 @@
 	<div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
 		{#each labs as lab}
 			<a
-				href={lab.href}
-				class="group glass-strong rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/10"
+				href={lab.comingSoon ? '#' : lab.href}
+				class="group glass-strong rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/10
+					{lab.comingSoon ? 'opacity-60 cursor-not-allowed' : ''}"
 			>
 				<!-- Card Header -->
 				<div class="h-24 sm:h-32 bg-gradient-to-br {lab.gradient} relative overflow-hidden">
@@ -50,6 +86,11 @@
 					<div class="absolute top-3 sm:top-4 right-3 sm:right-4 text-white/80 text-xs sm:text-sm">
 						{lab.duration}
 					</div>
+					{#if lab.comingSoon}
+						<div class="absolute top-3 sm:top-4 left-3 sm:left-4 px-2.5 py-1 bg-black/50 backdrop-blur-sm rounded-full text-xs font-medium text-white">
+							Coming Soon
+						</div>
+					{/if}
 				</div>
 
 				<!-- Card Body -->
@@ -62,30 +103,17 @@
 					</p>
 
 					<div class="mt-3 sm:mt-4 flex items-center text-rose-400 text-sm font-medium">
-						<span>Start Lab</span>
-						<svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-						</svg>
+						{#if lab.comingSoon}
+							<span class="text-gray-500">Coming Soon</span>
+						{:else}
+							<span>Start Lab</span>
+							<svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+						{/if}
 					</div>
 				</div>
 			</a>
 		{/each}
-	</div>
-
-	<!-- Coming Soon -->
-	<div class="mt-6 sm:mt-8 glass rounded-xl p-4 sm:p-6 border border-white/10">
-		<h3 class="text-base sm:text-lg font-semibold text-white mb-2">More Labs Coming Soon</h3>
-		<p class="text-gray-400 text-xs sm:text-sm mb-4">We're developing additional medical labs including ECG reading, blood analysis, and clinical case studies.</p>
-		<div class="flex flex-wrap gap-2">
-			<span class="px-3 py-1.5 rounded-full glass border border-white/10 text-xs text-gray-300">
-				ECG Reading
-			</span>
-			<span class="px-3 py-1.5 rounded-full glass border border-white/10 text-xs text-gray-300">
-				Blood Analysis
-			</span>
-			<span class="px-3 py-1.5 rounded-full glass border border-white/10 text-xs text-gray-300">
-				Patient Assessment
-			</span>
-		</div>
 	</div>
 </div>

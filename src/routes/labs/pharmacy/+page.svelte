@@ -1,13 +1,48 @@
 <script lang="ts">
 	const labs = [
 		{
+			title: 'Dosage Calculations',
+			description: 'Practice pharmaceutical dosage calculations for different patient populations, including pediatric and geriatric adjustments.',
+			href: '/labs/pharmacy/dosage-calculations',
+			difficulty: 'Beginner',
+			duration: '40 min',
+			gradient: 'from-fuchsia-500 to-pink-600',
+			comingSoon: true
+		},
+		{
 			title: 'Pharmaceutical Compounding',
 			description: 'Learn the art and science of preparing customized medications by combining and mixing pharmaceutical ingredients.',
 			href: '/labs/pharmacy/compounding',
-			icon: 'pill',
 			difficulty: 'Intermediate',
 			duration: '60 min',
 			gradient: 'from-pink-500 to-rose-600'
+		},
+		{
+			title: 'Drug Interactions',
+			description: 'Analyze potential drug-drug and drug-food interactions using a virtual patient medication review system.',
+			href: '/labs/pharmacy/drug-interactions',
+			difficulty: 'Intermediate',
+			duration: '50 min',
+			gradient: 'from-rose-500 to-red-600',
+			comingSoon: true
+		},
+		{
+			title: 'Quality Control Testing',
+			description: 'Perform quality control tests on pharmaceutical preparations including dissolution, uniformity, and stability testing.',
+			href: '/labs/pharmacy/quality-control',
+			difficulty: 'Advanced',
+			duration: '55 min',
+			gradient: 'from-purple-500 to-violet-600',
+			comingSoon: true
+		},
+		{
+			title: 'Pharmacokinetics Simulation',
+			description: 'Model drug absorption, distribution, metabolism, and excretion (ADME) using compartmental pharmacokinetic models.',
+			href: '/labs/pharmacy/pharmacokinetics',
+			difficulty: 'Advanced',
+			duration: '60 min',
+			gradient: 'from-indigo-500 to-blue-600',
+			comingSoon: true
 		}
 	];
 </script>
@@ -36,8 +71,9 @@
 	<div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
 		{#each labs as lab}
 			<a
-				href={lab.href}
-				class="group glass-strong rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/10"
+				href={lab.comingSoon ? '#' : lab.href}
+				class="group glass-strong rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-pink-500/10
+					{lab.comingSoon ? 'opacity-60 cursor-not-allowed' : ''}"
 			>
 				<!-- Card Header -->
 				<div class="h-24 sm:h-32 bg-gradient-to-br {lab.gradient} relative overflow-hidden">
@@ -50,6 +86,11 @@
 					<div class="absolute top-3 sm:top-4 right-3 sm:right-4 text-white/80 text-xs sm:text-sm">
 						{lab.duration}
 					</div>
+					{#if lab.comingSoon}
+						<div class="absolute top-3 sm:top-4 left-3 sm:left-4 px-2.5 py-1 bg-black/50 backdrop-blur-sm rounded-full text-xs font-medium text-white">
+							Coming Soon
+						</div>
+					{/if}
 				</div>
 
 				<!-- Card Body -->
@@ -62,19 +103,17 @@
 					</p>
 
 					<div class="mt-3 sm:mt-4 flex items-center text-pink-400 text-sm font-medium">
-						<span>Start Lab</span>
-						<svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-						</svg>
+						{#if lab.comingSoon}
+							<span class="text-gray-500">Coming Soon</span>
+						{:else}
+							<span>Start Lab</span>
+							<svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+						{/if}
 					</div>
 				</div>
 			</a>
 		{/each}
-	</div>
-
-	<!-- Coming Soon -->
-	<div class="mt-6 sm:mt-8 glass rounded-xl p-4 sm:p-6 border border-white/10">
-		<h3 class="text-lg font-semibold text-white mb-2">More Labs Coming Soon</h3>
-		<p class="text-gray-400 text-sm">We're developing additional pharmacy labs including drug interactions, dosage calculations, and quality control.</p>
 	</div>
 </div>

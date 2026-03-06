@@ -4,19 +4,62 @@
 			title: 'Microscopy Basics',
 			description: 'Learn to use a compound microscope to observe and identify cellular structures in plant and animal cells.',
 			href: '/labs/biology/microscopy',
-			icon: 'microscope',
 			difficulty: 'Beginner',
 			duration: '30 min',
 			gradient: 'from-emerald-500 to-green-600'
 		},
 		{
+			title: 'Mendelian Genetics',
+			description: 'Simulate genetic crosses to understand inheritance patterns, dominant/recessive traits, and Punnett square predictions.',
+			href: '/labs/biology/genetics',
+			difficulty: 'Beginner',
+			duration: '35 min',
+			gradient: 'from-lime-500 to-emerald-600',
+			comingSoon: true
+		},
+		{
 			title: 'Cell Division (Mitosis)',
 			description: 'Observe and identify the phases of mitosis in dividing cells, from interphase through cytokinesis.',
 			href: '/labs/biology/cell-division',
-			icon: 'cells',
 			difficulty: 'Intermediate',
 			duration: '45 min',
 			gradient: 'from-green-500 to-teal-600'
+		},
+		{
+			title: 'Enzyme Kinetics',
+			description: 'Study the effects of temperature, pH, and substrate concentration on enzyme activity using catalase.',
+			href: '/labs/biology/enzyme-kinetics',
+			difficulty: 'Intermediate',
+			duration: '45 min',
+			gradient: 'from-teal-500 to-cyan-600',
+			comingSoon: true
+		},
+		{
+			title: 'Photosynthesis & Light Reactions',
+			description: 'Investigate the effect of light intensity and wavelength on the rate of photosynthesis using aquatic plants.',
+			href: '/labs/biology/photosynthesis',
+			difficulty: 'Intermediate',
+			duration: '50 min',
+			gradient: 'from-yellow-500 to-green-600',
+			comingSoon: true
+		},
+		{
+			title: 'DNA Extraction & Electrophoresis',
+			description: 'Extract DNA from biological samples and separate DNA fragments using gel electrophoresis.',
+			href: '/labs/biology/dna-extraction',
+			difficulty: 'Advanced',
+			duration: '60 min',
+			gradient: 'from-cyan-500 to-blue-600',
+			comingSoon: true
+		},
+		{
+			title: 'Ecosystem Simulation',
+			description: 'Model population dynamics, food webs, and energy flow through a virtual ecosystem.',
+			href: '/labs/biology/ecosystem',
+			difficulty: 'Advanced',
+			duration: '55 min',
+			gradient: 'from-green-600 to-emerald-700',
+			comingSoon: true
 		}
 	];
 </script>
@@ -45,8 +88,9 @@
 	<div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
 		{#each labs as lab}
 			<a
-				href={lab.href}
-				class="group glass-strong rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10"
+				href={lab.comingSoon ? '#' : lab.href}
+				class="group glass-strong rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/10
+					{lab.comingSoon ? 'opacity-60 cursor-not-allowed' : ''}"
 			>
 				<!-- Card Header -->
 				<div class="h-24 sm:h-32 bg-gradient-to-br {lab.gradient} relative overflow-hidden">
@@ -59,6 +103,11 @@
 					<div class="absolute top-3 sm:top-4 right-3 sm:right-4 text-white/80 text-xs sm:text-sm">
 						{lab.duration}
 					</div>
+					{#if lab.comingSoon}
+						<div class="absolute top-3 sm:top-4 left-3 sm:left-4 px-2.5 py-1 bg-black/50 backdrop-blur-sm rounded-full text-xs font-medium text-white">
+							Coming Soon
+						</div>
+					{/if}
 				</div>
 
 				<!-- Card Body -->
@@ -71,19 +120,17 @@
 					</p>
 
 					<div class="mt-3 sm:mt-4 flex items-center text-emerald-400 text-sm font-medium">
-						<span>Start Lab</span>
-						<svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-						</svg>
+						{#if lab.comingSoon}
+							<span class="text-gray-500">Coming Soon</span>
+						{:else}
+							<span>Start Lab</span>
+							<svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+						{/if}
 					</div>
 				</div>
 			</a>
 		{/each}
-	</div>
-
-	<!-- Coming Soon -->
-	<div class="mt-6 sm:mt-8 glass rounded-xl p-4 sm:p-6 border border-white/10">
-		<h3 class="text-lg font-semibold text-white mb-2">More Labs Coming Soon</h3>
-		<p class="text-gray-400 text-sm">We're working on additional biology labs including genetics, photosynthesis, and ecology experiments.</p>
 	</div>
 </div>

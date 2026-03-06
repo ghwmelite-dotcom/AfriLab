@@ -4,7 +4,6 @@
 			title: 'Acid-Base Titration',
 			description: 'Learn to determine the concentration of an unknown acid or base through careful titration with a standardized solution.',
 			href: '/labs/chemistry/titration',
-			icon: 'flask',
 			difficulty: 'Beginner',
 			duration: '45 min',
 			gradient: 'from-cyan-500 to-blue-600'
@@ -13,10 +12,45 @@
 			title: 'UV-Vis Spectroscopy',
 			description: 'Analyze compounds using ultraviolet-visible spectroscopy to determine concentration and identify substances.',
 			href: '/labs/chemistry/spectroscopy',
-			icon: 'spectrum',
 			difficulty: 'Intermediate',
 			duration: '60 min',
 			gradient: 'from-violet-500 to-purple-600'
+		},
+		{
+			title: 'Chromatography Techniques',
+			description: 'Separate and identify mixture components using paper chromatography and thin-layer chromatography (TLC).',
+			href: '/labs/chemistry/chromatography',
+			difficulty: 'Beginner',
+			duration: '40 min',
+			gradient: 'from-teal-500 to-cyan-600',
+			comingSoon: true
+		},
+		{
+			title: 'Organic Synthesis: Aspirin',
+			description: 'Synthesize acetylsalicylic acid from salicylic acid and acetic anhydride, then test its purity.',
+			href: '/labs/chemistry/organic-synthesis',
+			difficulty: 'Intermediate',
+			duration: '60 min',
+			gradient: 'from-emerald-500 to-teal-600',
+			comingSoon: true
+		},
+		{
+			title: 'Electrochemistry & Galvanic Cells',
+			description: 'Build galvanic cells, measure cell potentials, and verify the electrochemical series.',
+			href: '/labs/chemistry/electrochemistry',
+			difficulty: 'Intermediate',
+			duration: '50 min',
+			gradient: 'from-amber-500 to-yellow-600',
+			comingSoon: true
+		},
+		{
+			title: 'Calorimetry & Thermochemistry',
+			description: 'Measure enthalpy changes for chemical reactions using a calorimeter and apply Hess\'s Law.',
+			href: '/labs/chemistry/calorimetry',
+			difficulty: 'Advanced',
+			duration: '55 min',
+			gradient: 'from-orange-500 to-red-600',
+			comingSoon: true
 		}
 	];
 </script>
@@ -45,8 +79,9 @@
 	<div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
 		{#each labs as lab}
 			<a
-				href={lab.href}
-				class="group glass-strong rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/10"
+				href={lab.comingSoon ? '#' : lab.href}
+				class="group glass-strong rounded-2xl border border-white/10 overflow-hidden hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-500/10
+					{lab.comingSoon ? 'opacity-60 cursor-not-allowed' : ''}"
 			>
 				<!-- Card Header -->
 				<div class="h-24 sm:h-32 bg-gradient-to-br {lab.gradient} relative overflow-hidden">
@@ -59,6 +94,11 @@
 					<div class="absolute top-3 sm:top-4 right-3 sm:right-4 text-white/80 text-xs sm:text-sm">
 						{lab.duration}
 					</div>
+					{#if lab.comingSoon}
+						<div class="absolute top-3 sm:top-4 left-3 sm:left-4 px-2.5 py-1 bg-black/50 backdrop-blur-sm rounded-full text-xs font-medium text-white">
+							Coming Soon
+						</div>
+					{/if}
 				</div>
 
 				<!-- Card Body -->
@@ -71,10 +111,14 @@
 					</p>
 
 					<div class="mt-3 sm:mt-4 flex items-center text-cyan-400 text-sm font-medium">
-						<span>Start Lab</span>
-						<svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-						</svg>
+						{#if lab.comingSoon}
+							<span class="text-gray-500">Coming Soon</span>
+						{:else}
+							<span>Start Lab</span>
+							<svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+							</svg>
+						{/if}
 					</div>
 				</div>
 			</a>
