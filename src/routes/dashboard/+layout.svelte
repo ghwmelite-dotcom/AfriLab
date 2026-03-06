@@ -2,7 +2,7 @@
 	import Header from '$components/layout/Header.svelte';
 	import Sidebar from '$components/layout/Sidebar.svelte';
 	import OnboardingTour from '$components/onboarding/OnboardingTour.svelte';
-	import { onboardingStore } from '$stores/onboardingStore';
+	import { onboardingStore } from '$stores/onboardingStore.svelte';
 	import type { Snippet } from 'svelte';
 
 	let { children }: { children: Snippet } = $props();
